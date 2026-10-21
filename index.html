@@ -149,6 +149,28 @@
 
   .now-badge{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;
     letter-spacing:.06em;color:#04121f;background:var(--waze);border-radius:99px;padding:2px 8px;margin-left:8px;}
+
+  /* ---------- All-stops Waze quick list ---------- */
+  .wl{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    margin:18px 0 4px;overflow:hidden;}
+  .wl-head{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:10px 12px;border-bottom:1px solid var(--border);}
+  .wl-title{font-size:.86rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .wl-toggle{min-height:40px;padding:6px 12px;background:var(--card2);border:1px solid var(--border);
+    border-radius:9px;color:var(--text);font-size:.82rem;font-weight:600;cursor:pointer;}
+  .wl-toggle:hover{background:var(--border);}
+  .wl-list{list-style:none;margin:0;padding:0;display:block;}
+  .wl-list[hidden]{display:none;}
+  .wl-row{display:flex;align-items:center;gap:10px;min-height:48px;padding:8px 12px;
+    border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);}
+  .wl-row:last-child{border-bottom:0;}
+  .wl-row:focus-visible{outline:2px solid var(--waze);outline-offset:-2px;border-radius:6px;}
+  .wl-km{flex:0 0 auto;min-width:52px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;font-size:.95rem;}
+  .wl-km small{font-size:.68rem;color:var(--muted);font-weight:400;margin-left:2px;}
+  .wl-name{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.95rem;}
+  .wl-ic{flex:0 0 auto;font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:5px 10px;
+    border-radius:99px;background:var(--waze);color:#04121f;}
+  .wl-row.dest .wl-name{color:var(--done);font-weight:700;}
 </style>
 </head>
 <body>
@@ -170,6 +192,13 @@
 </header>
 
 <div class="wrap">
+  <section class="wl" aria-labelledby="wl-title">
+    <div class="wl-head">
+      <span class="wl-title" id="wl-title">All stops → Waze</span>
+      <button class="wl-toggle" id="wl-toggle" type="button" aria-expanded="true" aria-controls="wl-list">Collapse</button>
+    </div>
+    <ul class="wl-list" id="wl-list"></ul>
+  </section>
   <p class="lede">One dog on board. All stops on the correct (southbound) carriageway. Tap a stop to mark it done — state survives a phone lock.</p>
   <div id="timeline" role="list"></div>
 
@@ -211,6 +240,7 @@
   "use strict";
   var TRIP_DATE = "2026-10-25";
   var STORE_KEY = "pamplona-route-2026-10-25";
+  var LIST_KEY = STORE_KEY + "-wazelist";  // collapsed/expanded flag, kept separate from the done-array key
   var TOTAL_KM = 1342;
   var DEPART_MIN = 270; // 04:30
 
@@ -303,6 +333,9 @@
       fuel:null, wazeSearch:"Area de servicio de Zuasti, A-15" }
   ];
 
+  var PAMPLONA = { name:"Pamplona", km:1342, lat:42.81253, lon:-1.64577, dest:true };
+  var WAZE_LIST = STOPS.concat([PAMPLONA]);
+
   var el = {
     clock: document.getElementById("clock"),
     kmLabel: document.getElementById("km-label"),
@@ -310,7 +343,9 @@
     bar: document.getElementById("bar"),
     nextText: document.getElementById("next-text"),
     timeline: document.getElementById("timeline"),
-    reset: document.getElementById("reset")
+    reset: document.getElementById("reset"),
+    wlList: document.getElementById("wl-list"),
+    wlToggle: document.getElementById("wl-toggle")
   };
 
   function pad(n){ return (n<10?"0":"")+n; }
@@ -346,6 +381,36 @@
     return '<span class="chip '+(c.cls||"")+'">'+esc(c.t)+'</span>';
   }
   function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  function fmtKm(k){ return k >= 1000 ? k.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") : String(k); }
+
+  function buildWazeList(){
+    var html = "";
+    WAZE_LIST.forEach(function(s){
+      html += '<li><a class="wl-row'+(s.dest?' dest':'')+'" href="'+waze(s.lat,s.lon)+'" rel="noopener"'
+        + ' aria-label="'+esc(s.name)+', '+fmtKm(s.km)+' km, open in Waze">'
+        + '<span class="wl-km">'+fmtKm(s.km)+'<small>km</small></span>'
+        + '<span class="wl-name">'+esc(s.name)+'</span>'
+        + '<span class="wl-ic" aria-hidden="true">Waze</span>'
+        + '</a></li>';
+    });
+    el.wlList.innerHTML = html;
+  }
+
+  var wlCollapsed = (function(){ try { return localStorage.getItem(LIST_KEY) === "1"; } catch(e){ return false; } })();
+  function applyWl(){
+    el.wlList.hidden = wlCollapsed;
+    el.wlToggle.setAttribute("aria-expanded", wlCollapsed ? "false" : "true");
+    el.wlToggle.textContent = wlCollapsed ? "Expand" : "Collapse";
+  }
+  el.wlToggle.addEventListener("click", function(){
+    wlCollapsed = !wlCollapsed;
+    try { localStorage.setItem(LIST_KEY, wlCollapsed ? "1" : "0"); } catch(e){}
+    applyWl();
+  });
+
+  buildWazeList();
+  applyWl();
 
   function renderTimeline(clockCurrentId, nextId){
     var html = "";
