@@ -1,0 +1,18 @@
+{
+  "name": "Rotterdam → Pamplona · 25 Oct 2026",
+  "short_name": "Pamplona Route",
+  "description": "Car trip Rotterdam → Pamplona with one dog, Sunday 25 Oct 2026. 8 stops, live clock, per-stop Waze links.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20128%20128%27%3E%3Crect%20width=%27128%27%20height=%27128%27%20rx=%2724%27%20fill=%27%230d1117%27/%3E%3Cpath%20d=%27M24%2092%20C40%2020%2060%20108%2088%2030%27%20stroke=%27%2333ccff%27%20stroke-width=%2710%27%20fill=%27none%27%20stroke-linecap=%27round%27/%3E%3Ccircle%20cx=%2724%27%20cy=%2792%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3Ccircle%20cx=%2788%27%20cy=%2730%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="description" content="Rotterdam → Pamplona by car, Sunday 25 Oct 2026 · 1 342 km, one dog, 8 stops. Depart 04:30, ETA Pamplona ~21:15.">
+
+<!-- Open Graph / Twitter (WhatsApp link preview) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rotterdam → Pamplona · Sun 25 Oct 2026">
+<meta property="og:description" content="Car trip with one dog · 1 342 km · depart 04:30 · ETA ~21:15. 6 route stops + 2 fuel stops, live clock, per-stop Waze links.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rotterdam → Pamplona · Sun 25 Oct 2026">
+<meta name="twitter:description" content="Car trip with one dog · 1 342 km · depart 04:30 · ETA ~21:15. 8 stops, live clock, per-stop Waze links.">
+
+<title>Rotterdam → Pamplona · Sun 25 Oct 2026</title>
+
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20128%20128%27%3E%3Crect%20width=%27128%27%20height=%27128%27%20rx=%2724%27%20fill=%27%230d1117%27/%3E%3Cpath%20d=%27M24%2092%20C40%2020%2060%20108%2088%2030%27%20stroke=%27%2333ccff%27%20stroke-width=%2710%27%20fill=%27none%27%20stroke-linecap=%27round%27/%3E%3Ccircle%20cx=%2724%27%20cy=%2792%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3Ccircle%20cx=%2788%27%20cy=%2730%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+
+<style>
+  :root{
+    --bg:#0d1117; --card:#161b22; --card2:#1c232d; --border:#30363d;
+    --text:#e6edf3; --muted:#9198a1;
+    --accent:#58a6ff; --waze:#33ccff; --done:#3fb950; --warn:#d29922; --danger:#f85149;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%;}
+  body{min-width:320px;}
+  a{color:var(--accent);}
+  .wrap{max-width:760px;margin:0 auto;padding:0 12px 40px;}
+
+  /* ---------- Sticky header ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(13,17,23,.94);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);padding:10px 12px 12px;}
+  .h-title{font-size:1.22rem;font-weight:700;line-height:1.2;}
+  .h-meta{color:var(--muted);font-size:.92rem;margin-top:2px;}
+  .h-clock{color:var(--text);font-variant-numeric:tabular-nums;font-weight:600;}
+  .progress-row{display:flex;align-items:baseline;justify-content:space-between;
+    flex-wrap:wrap;gap:2px 10px;
+    margin-top:8px;font-size:.88rem;color:var(--muted);}
+  .progress-row b{color:var(--text);font-variant-numeric:tabular-nums;}
+  .bar{height:8px;background:var(--card2);border-radius:99px;margin-top:4px;overflow:hidden;}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--done),var(--waze));
+    border-radius:99px;transition:width .4s ease;width:0;}
+  .next-summary{margin-top:10px;padding:10px 12px;background:var(--card);
+    border:1px solid var(--border);border-radius:10px;font-size:.95rem;}
+  .next-summary .lbl{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;}
+  .next-summary b{color:var(--waze);}
+
+  /* ---------- Sections ---------- */
+  h2.sec{margin:26px 0 10px;font-size:1.05rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  .lede{color:var(--muted);font-size:.95rem;margin:6px 0 16px;}
+
+  /* ---------- Stop cards ---------- */
+  .stop{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    margin:0 0 14px;overflow:hidden;}
+  .stop.current{border-color:var(--waze);box-shadow:0 0 0 1px var(--waze), 0 0 22px -6px var(--waze);}
+  .stop.done{opacity:.62;}
+  .stop.done .stop-name{text-decoration:line-through;}
+  .stop-head{padding:12px 14px 10px;}
+  .stop-top{display:flex;align-items:flex-start;gap:10px;}
+  .km-badge{flex:0 0 auto;min-width:64px;text-align:center;padding:6px 8px;background:var(--card2);
+    border-radius:10px;border:1px solid var(--border);}
+  .km-badge .k{font-size:1.12rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .km-badge .l{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .stop-title{flex:1 1 auto;min-width:0;}
+  .stop-name{font-size:1.12rem;font-weight:700;line-height:1.25;}
+  .stop-kind{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.06em;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle;}
+  .stop-kind.stop{background:rgba(88,166,255,.16);color:var(--accent);}
+  .stop-kind.fuel{background:rgba(211,153,34,.16);color:var(--warn);}
+  .stop-kind.lunch{background:rgba(63,185,80,.18);color:var(--done);}
+  .stop-road{color:var(--muted);font-size:.9rem;margin-top:4px;}
+  .stop-time{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;}
+  .time-pill{background:var(--card2);border:1px solid var(--border);border-radius:8px;
+    padding:5px 10px;font-size:.9rem;font-variant-numeric:tabular-nums;}
+  .time-pill b{color:var(--text);}
+  .time-pill .l{color:var(--muted);font-size:.76rem;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px;}
+  .chip{font-size:.8rem;line-height:1.25;padding:5px 10px;border-radius:99px;
+    background:var(--card2);border:1px solid var(--border);color:var(--text);}
+  .chip.no{color:var(--danger);border-color:rgba(248,81,73,.4);}
+  .chip.ok{color:var(--done);}
+  .chip.warn{color:var(--warn);}
+
+  .dog{padding:8px 14px;background:rgba(63,185,80,.07);border-top:1px dashed var(--border);}
+  .dog .dg{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--done);}
+  .dog .dr{font-size:.72rem;color:var(--muted);margin-left:8px;font-weight:600;}
+  .dog p{margin:4px 0 0;font-size:.93rem;}
+
+  .caution{margin:8px 14px 0;padding:8px 11px;border-radius:9px;font-size:.86rem;
+    background:rgba(211,153,34,.1);border:1px solid rgba(211,153,34,.35);color:#e8c07a;}
+  .caution b{color:var(--warn);}
+
+  .actions{display:flex;gap:8px;padding:12px 14px 14px;flex-wrap:wrap;}
+  .btn{flex:1 1 100%;min-height:52px;border-radius:12px;font-size:1.05rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+    border:1px solid transparent;cursor:pointer;color:#04121f;}
+  .btn.waze{background:var(--waze);}
+  .btn.gmaps{flex:1 1 100%;min-height:48px;background:var(--card2);color:var(--text);
+    border:1px solid var(--border);font-size:.95rem;font-weight:600;}
+  .btn.toggle{flex:1 1 auto;min-height:48px;background:var(--card2);color:var(--muted);
+    border:1px solid var(--border);font-size:.95rem;font-weight:600;}
+  .btn.toggle[aria-pressed="true"]{background:rgba(63,185,80,.16);color:var(--done);
+    border-color:rgba(63,185,80,.4);}
+  @media(min-width:480px){ .btn.waze{flex:1 1 60%;} .btn.gmaps{flex:1 1 30%;} }
+
+  /* ---------- Fuel card extras ---------- */
+  .fuel{padding:0 14px 10px;}
+  .fuel .brand{font-weight:700;margin-bottom:2px;}
+  .fuel .addr{color:var(--muted);font-size:.9rem;}
+  .prices{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;}
+  .price{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:7px 11px;min-width:96px;}
+  .price .t{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .price .v{font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--warn);}
+  .fuel ul{margin:6px 0;padding-left:18px;color:var(--text);font-size:.9rem;}
+  .fuel ul li{margin:3px 0;}
+  .save{font-size:.9rem;color:var(--done);font-weight:600;margin-top:6px;}
+  .disclaimer{font-size:.78rem;color:var(--muted);margin-top:6px;}
+  details.lux{margin-top:6px;font-size:.82rem;color:var(--muted);}
+  details.lux summary{cursor:pointer;color:var(--muted);min-height:40px;display:flex;align-items:center;}
+  details.lux p{margin:4px 0 8px;}
+
+  /* ---------- Emergency section ---------- */
+  .emergency{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:4px 0;}
+  .em-item{padding:12px 14px;border-bottom:1px solid var(--border);}
+  .em-item:last-child{border-bottom:0;}
+  .em-item .t{font-weight:700;display:flex;align-items:center;gap:8px;}
+  .em-item .t .ic{width:22px;text-align:center;}
+  .em-item p{margin:4px 0 0;font-size:.92rem;color:var(--text);}
+  .em-item.caution-item{background:rgba(211,153,34,.09);}
+  .em-item.caution-item .t{color:var(--warn);}
+
+  footer{margin-top:26px;color:var(--muted);font-size:.82rem;line-height:1.5;}
+  footer p{margin:6px 0;}
+  .reset-row{margin-top:10px;display:flex;justify-content:flex-end;}
+  .reset{min-height:48px;padding:0 16px;background:transparent;border:1px solid var(--danger);
+    color:var(--danger);border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;}
+  .reset.confirm{background:var(--danger);color:#fff;}
+
+  .now-badge{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.06em;color:#04121f;background:var(--waze);border-radius:99px;padding:2px 8px;margin-left:8px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap" style="padding:0;">
+    <div class="h-title">Rotterdam → Pamplona</div>
+    <div class="h-meta">Sun 25 Oct 2026 · <span class="h-clock" id="clock">--:--</span> · departed 04:30 (winter time)</div>
+    <div class="progress-row">
+      <span id="km-label"><b>0</b> / 1 342 km</span>
+      <span id="eta-label">ETA Pamplona ~21:15</span>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="next-summary" id="next-summary">
+      <div class="lbl">Next stop</div>
+      <div id="next-text">Loading…</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <p class="lede">One dog on board. All stops on the correct (southbound) carriageway. Tap a stop to mark it done — state survives a phone lock.</p>
+  <div id="timeline" role="list"></div>
+
+  <h2 class="sec">Emergency / practical</h2>
+  <div class="emergency">
+    <div class="em-item">
+      <div class="t"><span class="ic">💶</span> Tolls</div>
+      <p>≈ €100 one way — France ≈ €95 (A1 + A10 + A63), Spain ≈ €3 (AP-8). Every barrier takes card; no télépéage badge needed.</p>
+    </div>
+    <div class="em-item">
+      <div class="t"><span class="ic">🌇</span> Sunset ~19:00</div>
+      <p>Sunset on the Atlantic coast is ~19:00–19:10 CET. Stops 5 (Océan, dusk) and 6 (Zuasti) are in the dark — take a headtorch or use phone light for the dog walks.</p>
+    </div>
+    <div class="em-item">
+      <div class="t"><span class="ic">🚗</span> Toussaint traffic</div>
+      <p>French school holidays 17 Oct – 2 Nov. 25 Oct is the middle weekend, so the heavy flow is the northbound return — your southbound direction is the light one. Expect company around Orléans and Bordeaux, not a jam. Bison Futé forecast not yet published; check 23–24 Oct.</p>
+    </div>
+    <div class="em-item caution-item">
+      <div class="t"><span class="ic">⚠️</span> Paris Crit'Air / ZFE — open caution</div>
+      <p>Paris low-emission zone rules for a foreign-plated car on the A86/A6b transit corridor are <b>unverified for 2026</b>. If your car is an older diesel, check your Crit'Air class before departure.</p>
+    </div>
+    <div class="em-item">
+      <div class="t"><span class="ic">💳</span> Cards at the péage</div>
+      <p>Keep a physical card handy — phone-only wallets occasionally fail at the barrier. Do not enter télépéage (30 km/h) lanes.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p><b>Time assumption:</b> arrival windows come from the route plan's cumulative km + dwell (OSRM free-flow, mildly pessimistic). Fuel-stop times are interpolated onto those legs — DATS 24 Harelbeke ~06:40–07:10 (per the fuel plan), Alcampo Irun ~20:05–20:20 (derived from the Irun border crossing ~20:10; the fuel plan's “~15:30” assumed a shorter route and is ignored). Alcampo's 15-min dwell may push Zuasti/Pamplona ~15 min later, still inside the 21:00–21:45 band.</p>
+    <p>Facts, coordinates, prices and names are verbatim from the two research artifacts (21 Oct 2026). Coordinates are not rounded. Mirrored (northbound-side) aires were excluded. Fuel prices are a snapshot — re-check the DATS 24 station page the evening before departure.</p>
+    <div class="reset-row">
+      <button class="reset" id="reset" type="button">Reset trip</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var TRIP_DATE = "2026-10-25";
+  var STORE_KEY = "pamplona-route-2026-10-25";
+  var TOTAL_KM = 1342;
+  var DEPART_MIN = 270; // 04:30
+
+  // Arrival anchors [minutes-from-midnight, km] for clock interpolation.
+  var ANCHORS = [[270,0],[400,215],[460,271],[615,479],[750,669],[960,929],[1110,1146],[1205,1250],[1250,1329],[1275,1342]];
+
+  var STOPS = [
+    { id:"harelbeke", type:"fuel", km:215, name:"DATS 24 Harelbeke",
+      road:"Kortrijksesteenweg (N43) — ~3 min off the E17, Harelbeke exit, Belgium",
+      lat:50.84637, lon:3.29638, arrive:"06:40", arriveEnd:"07:10", dwell:"refuel ~10 min",
+      chips:["Fuel 24/7","Unmanned","Card only — no cash","No shop","Free tyre inflator"],
+      dog:"Lit forecourt on the Colruyt car park, Leie corridor + roadside verges nearby. A 2-min sniff, not a park.",
+      dogRating:"Tarmac forecourt",
+      caution:"Dog verge not verified from imagery — treat as “verge likely”, check on arrival.",
+      fuel:{ brand:"DATS 24 (Colruyt Group, unmanned) — Harelbeke",
+        address:"Kortrijksesteenweg 206-2, 8530 Harelbeke, Belgium",
+        diesel:"€2.244", e10:"€1.843", extra:"Superplus 98 €2.128",
+        hours:"24/7, unmanned, no shop",
+        card:"Card at pump only — Maestro/Bancontact, Visa, Mastercard, Apple Pay, Google Pay. No cash. Pre-auth ~€100–125 — carry a second card.",
+        detour:"+4 min (~2.4 km round trip)",
+        save:"Saves €12.71 (diesel) / €33.67 (petrol) vs the Dutch pump average on a 55 L fill.",
+        lux:"Luxembourg is cheaper (diesel €2.038) but +250–300 km and 2.5–3 h, plus ~€25 extra tolls — net ~€55 loss. Skip it." },
+      wazeSearch:"DATS 24 Harelbeke Kortrijksesteenweg" },
+
+    { id:"wancourt", type:"stop", km:271, name:"Aire de Wancourt Ouest",
+      road:"A1 Autoroute du Nord, sens Paris (southbound) · ≈ PK 170 · SANEF",
+      lat:50.26222, lon:2.86299, arrive:"07:40", arriveEnd:"07:55", dwell:"15 min",
+      chips:["Parking","Picnic area",{t:"No fuel / no shop",cls:"no"},"Toilets — basic"],
+      dog:"Best greenery of the northern stretch — a genuine 10-min loop on grass and woodland edge. Keep the lead on (open farmland + motorway boundary).",
+      dogRating:"Grass & woodland",
+      caution:"Toilets unverified: OSM says no, SANEF lists it as a repos area — expect at most basic facilities. Do not plan a fill here.",
+      fuel:null, wazeSearch:"Aire de Wancourt Ouest, A1" },
+
+    { id:"limours", type:"stop", km:479, name:"Aire de Limours-Janvry",
+      road:"A10 L'Aquitaine, sens Bordeaux (southbound) · ≈ PK 17–20 · Vinci/Cofiroute",
+      lat:48.63609, lon:2.14652, arrive:"10:15", arriveEnd:"10:35", dwell:"20 min",
+      chips:["Fuel 24/7 (card)","Shop","2 restaurants + fast food","Toilets ×3","Drinking water","EV ×3"],
+      dog:"Mostly tarmac apron with a wooded perimeter strip (Chevreuse woods edge). Fine for 15 min of sniffing — not a walk.",
+      dogRating:"Tarmac + verge",
+      caution:null, fuel:null, wazeSearch:"Aire de Limours Janvry, A10" },
+
+    { id:"tours", type:"stop", km:669, name:"Aire de Tours-La Longue Vue",
+      road:"A10 L'Aquitaine, sens Bordeaux · ≈ PK 208 · Vinci Autoroutes",
+      lat:47.47516, lon:0.77545, arrive:"12:30", arriveEnd:"13:15", dwell:"45 min", lunch:true,
+      chips:["Fuel 24/7","Shop","3 restaurants","Toilets","EV ×8"],
+      dog:"Pick of the day — a proper 25–35 min leg-stretch loop (grass bank behind the parking + a track into the fields). Shade if warm, shelter if not.",
+      dogRating:"Grass & woodland",
+      caution:null, fuel:null, wazeSearch:"Aire de Tours La Longue Vue, A10" },
+
+    { id:"stleger", type:"stop", km:929, name:"Aire de Saint-Léger Ouest",
+      road:"A10, sens Bordeaux · ≈ PK 468 · Vinci/ASF",
+      lat:45.61118, lon:-0.60231, arrive:"16:00", arriveEnd:"16:15", dwell:"15 min",
+      chips:["Fuel 24/7","2 fast food","Toilets ×3","EV ×1"],
+      dog:"Short grass strip and a perimeter track (vineyard/woodland edge). Pee-and-sniff, not a hike.",
+      dogRating:"Verge + track",
+      caution:null, fuel:null, wazeSearch:"Aire de Saint-Leger Ouest, A10" },
+
+    { id:"ocean", type:"stop", km:1146, name:"Aire de l'Océan-Ouest",
+      road:"A63 Autoroute des Landes, sens Bayonne/Espagne · Vinci/ASF",
+      lat:43.93696, lon:-1.09315, arrive:"18:30", arriveEnd:"18:55", dwell:"25 min",
+      chips:["Fuel 24/7","Shop 24/7","Toilets ×3","EV ×3"],
+      dog:"Landes pine forest on three sides — the best off-lead-ish sniffing of the day. Dusk (~19:00): take a headtorch or use phone light.",
+      dogRating:"Pine forest",
+      caution:null, fuel:null, wazeSearch:"Aire de l'Ocean Ouest, A63" },
+
+    { id:"alcampo", type:"fuel", km:1250, name:"Alcampo Irun",
+      road:"Parque Comercial Txingudi — ~2 km off the AP-8 at the Irun/Txingudi exit",
+      lat:43.32258, lon:-1.83472, arrive:"20:05", arriveEnd:"20:20", dwell:"refuel + break ~15 min",
+      chips:["Fuel","Hypermarket","Cafés","Toilets","Large lit car park"],
+      dog:"Best break of the drive — retail-park edges with grass strips. Recommended as a 15-min dog stop.",
+      dogRating:"Grass strips",
+      caution:"Backup Zabaleta (Zaisa II, Irun): Sunday hours unverified — check on the day. (Bidasoil on N-121-A is a third option if both are shut.)",
+      fuel:{ brand:"Alcampo (Auchan hypermarket forecourt) — Irun",
+        address:"Parque Comercial Txingudi, Zona Araso B, Ventas 80, 20305 Irun, Gipuzkoa, Spain",
+        diesel:"€1.769", e10:"€1.669–1.679", extra:null,
+        hours:"Mon–Sun 06:00–00:00",
+        card:"Card at pump / kiosk (Visa, Mastercard, Spanish debit); staffed most of the day.",
+        detour:"+4 min (~2 km off the AP-8)",
+        save:"Saves €31.79 (diesel) / €24.64 (petrol) vs the French average on a 55 L fill.",
+        lux:null },
+      wazeSearch:"Alcampo Irun Txingudi" },
+
+    { id:"zuasti", type:"stop", km:1329, name:"Área de servicio de Zuasti",
+      road:"A-15, sentido Pamplona (southbound) · ≈ 20 km before Pamplona",
+      lat:42.86204, lon:-1.74404, arrive:"20:50", arriveEnd:"21:00", dwell:"10 min",
+      chips:["Fuel (not 24/7)","Café/restaurant","Toilets","Shop"],
+      dog:"Open grassland, scrub and a patch of woodland; the Zuasti golf-course hamlet is behind the parking. Flat, quiet — 10 min of grass.",
+      dogRating:"Grass & scrub",
+      caution:"Open at 20:50 but not 24/7 in the small hours. If you run past 21:30, skip it — the last 12 km is 15 min and the dog will sleep.",
+      fuel:null, wazeSearch:"Area de servicio de Zuasti, A-15" }
+  ];
+
+  var el = {
+    clock: document.getElementById("clock"),
+    kmLabel: document.getElementById("km-label"),
+    etaLabel: document.getElementById("eta-label"),
+    bar: document.getElementById("bar"),
+    nextText: document.getElementById("next-text"),
+    timeline: document.getElementById("timeline"),
+    reset: document.getElementById("reset")
+  };
+
+  function pad(n){ return (n<10?"0":"")+n; }
+  function fmt(m){ return pad(Math.floor(m/60)) + ":" + pad(m%60); }
+  function localDateStr(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+  function nowMin(d){ return d.getHours()*60 + d.getMinutes(); }
+
+  function loadDone(){
+    try { var v = JSON.parse(localStorage.getItem(STORE_KEY)||"[]"); return Array.isArray(v)?v:[]; }
+    catch(e){ return []; }
+  }
+  var done = loadDone();
+  var doneSet = {};
+  done.forEach(function(id){ doneSet[id]=true; });
+
+  function saveDone(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(Object.keys(doneSet))); }catch(e){} }
+
+  function clockKm(min){
+    if(min <= ANCHORS[0][0]) return 0;
+    if(min >= ANCHORS[ANCHORS.length-1][0]) return TOTAL_KM;
+    for(var i=0;i<ANCHORS.length-1;i++){
+      var t0=ANCHORS[i][0], k0=ANCHORS[i][1], t1=ANCHORS[i+1][0], k1=ANCHORS[i+1][1];
+      if(min>=t0 && min<=t1){ return k0 + (k1-k0)*(min-t0)/(t1-t0); }
+    }
+    return TOTAL_KM;
+  }
+
+  function waze(lat,lon){ return "https://waze.com/ul?ll="+lat+","+lon+"&navigate=yes"; }
+  function gmaps(lat,lon){ return "https://maps.google.com/?q="+lat+","+lon; }
+
+  function chipHTML(c){
+    if(typeof c === "string") return '<span class="chip">'+esc(c)+'</span>';
+    return '<span class="chip '+(c.cls||"")+'">'+esc(c.t)+'</span>';
+  }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  function renderTimeline(clockCurrentId, nextId){
+    var html = "";
+    STOPS.forEach(function(s){
+      var isDone = !!doneSet[s.id];
+      var isCurrent = (s.id === nextId);
+      var isNow = (s.id === clockCurrentId && !isDone);
+      var classes = ["stop"];
+      if(isCurrent) classes.push("current");
+      if(isDone) classes.push("done");
+
+      var kindTag = "";
+      if(s.type === "fuel") kindTag = '<span class="stop-kind fuel">Fuel</span>';
+      else if(s.lunch) kindTag = '<span class="stop-kind lunch">Lunch</span>';
+      else kindTag = '<span class="stop-kind stop">Stop</span>';
+
+      var chips = s.chips.map(chipHTML).join("");
+      var caution = s.caution ? '<div class="caution"><b>⚠</b> '+esc(s.caution)+'</div>' : "";
+      var nowBadge = isNow ? '<span class="now-badge">now</span>' : "";
+
+      var fuel = "";
+      if(s.fuel){
+        var f = s.fuel;
+        var lux = f.lux ? '<details class="lux"><summary>Luxembourg not worth it</summary><p>'+esc(f.lux)+'</p></details>' : "";
+        fuel = '<div class="fuel">'
+          + '<div class="brand">'+esc(f.brand)+'</div>'
+          + '<div class="addr">'+esc(f.address)+'</div>'
+          + '<div class="prices">'
+            + '<div class="price"><div class="t">Diesel B7 / A</div><div class="v">'+esc(f.diesel)+'</div></div>'
+            + '<div class="price"><div class="t">E10 / 95</div><div class="v">'+esc(f.e10)+'</div></div>'
+            + (f.extra ? '<div class="price"><div class="t">98</div><div class="v">'+esc(f.extra)+'</div></div>' : '')
+          + '</div>'
+          + '<ul><li><b>Hours:</b> '+esc(f.hours)+'</li>'
+          + '<li><b>Card:</b> '+esc(f.card)+'</li>'
+          + '<li><b>Detour:</b> '+esc(f.detour)+'</li></ul>'
+          + '<div class="save">'+esc(f.save)+'</div>'
+          + '<div class="disclaimer">Prices checked 21 Oct 2026 · re-check the evening before departure.</div>'
+          + lux
+          + '</div>';
+      }
+
+      html += '<article class="'+classes.join(" ")+'" role="listitem" data-id="'+esc(s.id)+'">'
+        + '<div class="stop-head">'
+          + '<div class="stop-top">'
+            + '<div class="km-badge"><div class="k">'+s.km+'</div><div class="l">km</div></div>'
+            + '<div class="stop-title">'
+              + '<div class="stop-name">'+esc(s.name)+kindTag+nowBadge+'</div>'
+              + '<div class="stop-road">'+esc(s.road)+'</div>'
+            + '</div>'
+          + '</div>'
+          + '<div class="stop-time">'
+            + '<span class="time-pill"><span class="l">ETA </span><b>'+s.arrive+'</b></span>'
+            + '<span class="time-pill"><span class="l">→ </span><b>'+s.arriveEnd+'</b></span>'
+            + '<span class="time-pill"><span class="l">Dwell </span><b>'+s.dwell+'</b></span>'
+          + '</div>'
+        + '</div>'
+        + '<div class="chips">'+chips+'</div>'
+        + '<div class="dog"><span class="dg">Dog</span><span class="dr">'+esc(s.dogRating)+'</span><p>'+esc(s.dog)+'</p></div>'
+        + caution
+        + fuel
+        + '<div class="actions">'
+          + '<a class="btn waze" href="'+waze(s.lat,s.lon)+'" rel="noopener">Waze · Navigate</a>'
+          + '<a class="btn gmaps" href="'+gmaps(s.lat,s.lon)+'" rel="noopener">Google Maps</a>'
+          + '<button class="btn toggle" type="button" role="button" aria-pressed="'+isDone+'" data-id="'+esc(s.id)+'">'
+            + (isDone ? "✓ Done" : "Mark done")
+          + '</button>'
+        + '</div>'
+      + '</article>';
+    });
+
+    // Destination row
+    html += '<article class="stop" role="listitem" style="border-style:dashed;border-color:var(--done);">'
+      + '<div class="stop-head">'
+        + '<div class="stop-top">'
+          + '<div class="km-badge"><div class="k">1 342</div><div class="l">km</div></div>'
+          + '<div class="stop-title">'
+            + '<div class="stop-name">Pamplona</div>'
+            + '<div class="stop-road">PA-30 — arrive ~21:15 (band 21:00–21:45)</div>'
+          + '</div>'
+        + '</div>'
+      + '</div>'
+    + '</article>';
+
+    el.timeline.innerHTML = html;
+  }
+
+  function nextStop(){ for(var i=0;i<STOPS.length;i++){ if(!doneSet[STOPS[i].id]) return STOPS[i]; } return null; }
+
+  function update(){
+    var now = new Date();
+    el.clock.textContent = fmt(nowMin(now)) + ":" + pad(now.getSeconds());
+
+    var isTrip = (localDateStr(now) === TRIP_DATE);
+    var min = nowMin(now);
+    var cKm = isTrip ? clockKm(min) : 0;
+
+    // clock "current" stop (trip day only): latest whose arrival start has passed
+    var clockCurrent = null;
+    if(isTrip && min >= DEPART_MIN){
+      for(var i=0;i<STOPS.length;i++){
+        var a = toMin(STOPS[i].arrive);
+        if(min >= a) clockCurrent = STOPS[i].id;
+      }
+    }
+
+    var nxt = nextStop();
+    var doneKm = 0;
+    STOPS.forEach(function(s){ if(doneSet[s.id]) doneKm = Math.max(doneKm, s.km); });
+    var kmDone = Math.min(TOTAL_KM, Math.max(doneKm, cKm));
+
+    el.bar.style.width = (kmDone/TOTAL_KM*100).toFixed(1) + "%";
+    el.kmLabel.innerHTML = "<b>" + Math.round(kmDone).toLocaleString("nl-NL") + "</b> / 1 342 km";
+
+    if(nxt){
+      el.nextText.innerHTML = "<b>" + esc(nxt.name) + "</b> · ETA ~" + esc(nxt.arrive) + " · km " + nxt.km
+        + (isTrip && min < DEPART_MIN ? " · departs 04:30" : "");
+      el.etaLabel.textContent = "Next stop km " + nxt.km + " · ETA 21:15";
+    } else {
+      el.nextText.innerHTML = "<b>Arrived — Pamplona.</b> Drive safely, the dog thanks you.";
+      el.etaLabel.textContent = "1 342 / 1 342 km";
+    }
+
+    renderTimeline(clockCurrent, nxt ? nxt.id : null);
+  }
+
+  function toMin(hhmm){
+    var p = hhmm.split(":"); return (+p[0])*60 + (+p[1]);
+  }
+
+  // Event delegation
+  el.timeline.addEventListener("click", function(ev){
+    var t = ev.target.closest ? ev.target.closest(".btn.toggle") : null;
+    if(!t) return;
+    var id = t.getAttribute("data-id");
+    if(doneSet[id]) delete doneSet[id]; else doneSet[id] = true;
+    saveDone();
+    update();
+  });
+
+  // Reset: two-step confirm
+  var resetArmed = false;
+  el.reset.addEventListener("click", function(){
+    if(!resetArmed){
+      resetArmed = true;
+      el.reset.textContent = "Tap again to confirm";
+      el.reset.classList.add("confirm");
+      setTimeout(function(){ resetArmed = false; el.reset.textContent = "Reset trip"; el.reset.classList.remove("confirm"); }, 3000);
+      return;
+    }
+    doneSet = {}; saveDone(); resetArmed = false;
+    el.reset.textContent = "Reset trip"; el.reset.classList.remove("confirm");
+    update();
+  });
+
+  update();
+  setInterval(update, 1000);
+})();
+</script>
+</body>
+</html>
