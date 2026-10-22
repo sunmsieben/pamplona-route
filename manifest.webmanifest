@@ -1,7 +1,7 @@
 {
   "name": "Rotterdam → Pamplona · 25 Oct 2026",
   "short_name": "Pamplona Route",
-  "description": "Car trip Rotterdam → Pamplona with one dog, Sunday 25 Oct 2026. 8 stops, live clock, per-stop Waze links.",
+  "description": "Car trip Rotterdam → Pamplona with one dog, Sunday 25 Oct 2026. 10 stops, E10 on a 50 L tank, live clock, per-stop Waze links.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

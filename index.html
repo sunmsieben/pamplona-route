@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d1117">
-<meta name="description" content="Rotterdam → Pamplona by car, Sunday 25 Oct 2026 · 1 342 km, one dog, 8 stops. Depart 04:30, ETA Pamplona ~21:15.">
+<meta name="description" content="Rotterdam → Pamplona by car, Sunday 25 Oct 2026 · 1 342 km, one dog, 10 stops, E10 on a 50 L tank. Depart 04:30, ETA Pamplona ~22:05.">
 
 <!-- Open Graph / Twitter (WhatsApp link preview) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Rotterdam → Pamplona · Sun 25 Oct 2026">
-<meta property="og:description" content="Car trip with one dog · 1 342 km · depart 04:30 · ETA ~21:15. 6 route stops + 2 fuel stops, live clock, per-stop Waze links.">
+<meta property="og:description" content="Car trip with one dog · 1 342 km · E10, 50 L tank, 3 fills · depart 04:30 · ETA ~22:05. 6 aires + 3 fuel stops, live clock, per-stop Waze links.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Rotterdam → Pamplona · Sun 25 Oct 2026">
-<meta name="twitter:description" content="Car trip with one dog · 1 342 km · depart 04:30 · ETA ~21:15. 8 stops, live clock, per-stop Waze links.">
+<meta name="twitter:description" content="Car trip with one dog · 1 342 km · E10, 3 fills, 650–680 km usable range · depart 04:30 · ETA ~22:05. 10 stops, live clock, per-stop Waze links.">
 
 <title>Rotterdam → Pamplona · Sun 25 Oct 2026</title>
 
@@ -124,6 +124,10 @@
   .fuel ul{margin:6px 0;padding-left:18px;color:var(--text);font-size:.9rem;}
   .fuel ul li{margin:3px 0;}
   .save{font-size:.9rem;color:var(--done);font-weight:600;margin-top:6px;}
+  .tank{font-size:.9rem;margin-top:6px;padding:7px 10px;border-radius:9px;
+    background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);color:var(--text);}
+  .fb{font-size:.86rem;margin-top:6px;padding:7px 10px;border-radius:9px;
+    background:rgba(211,153,34,.1);border:1px solid rgba(211,153,34,.3);color:#e8c07a;}
   .disclaimer{font-size:.78rem;color:var(--muted);margin-top:6px;}
   details.lux{margin-top:6px;font-size:.82rem;color:var(--muted);}
   details.lux summary{cursor:pointer;color:var(--muted);min-height:40px;display:flex;align-items:center;}
@@ -156,7 +160,7 @@
   .wl-head{display:flex;align-items:center;justify-content:space-between;gap:8px;
     padding:10px 12px;border-bottom:1px solid var(--border);}
   .wl-title{font-size:.86rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
-  .wl-toggle{min-height:40px;padding:6px 12px;background:var(--card2);border:1px solid var(--border);
+  .wl-toggle{min-height:48px;padding:6px 12px;background:var(--card2);border:1px solid var(--border);
     border-radius:9px;color:var(--text);font-size:.82rem;font-weight:600;cursor:pointer;}
   .wl-toggle:hover{background:var(--border);}
   .wl-list{list-style:none;margin:0;padding:0;display:block;}
@@ -171,6 +175,26 @@
   .wl-ic{flex:0 0 auto;font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:5px 10px;
     border-radius:99px;background:var(--waze);color:#04121f;}
   .wl-row.dest .wl-name{color:var(--done);font-weight:700;}
+
+  /* ---------- Fuel & range block ---------- */
+  .rng{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .rr{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:10px 12px;
+    border-bottom:1px solid var(--border);font-size:.9rem;}
+  .rr .leg{flex:1 1 118px;min-width:0;font-weight:600;line-height:1.25;}
+  .rr .leg small{display:block;color:var(--muted);font-weight:400;font-size:.78rem;}
+  .rr .res{flex:1 1 100px;min-width:0;text-align:right;font-size:.84rem;color:var(--muted);
+    font-variant-numeric:tabular-nums;}
+  .rr .res b{color:var(--text);}
+  .rr .vf{flex:0 0 auto;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+    padding:3px 8px;border-radius:99px;background:rgba(63,185,80,.16);color:var(--done);}
+  .rr .vf.edge{background:rgba(211,153,34,.16);color:var(--warn);}
+  .cost{padding:10px 12px 12px;font-size:.86rem;}
+  .cost-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;}
+  .cost-row span{min-width:0;color:var(--muted);}
+  .cost-row b{flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--text);}
+  .cost-row.tot{margin-top:6px;padding-top:8px;border-top:1px solid var(--border);}
+  .cost-row.tot span{color:var(--text);font-weight:600;}
+  .cost-row.tot b{color:var(--done);font-size:1.02rem;}
 </style>
 </head>
 <body>
@@ -178,10 +202,10 @@
 <header>
   <div class="wrap" style="padding:0;">
     <div class="h-title">Rotterdam → Pamplona</div>
-    <div class="h-meta">Sun 25 Oct 2026 · <span class="h-clock" id="clock">--:--</span> · departed 04:30 (winter time)</div>
+    <div class="h-meta">Sun 25 Oct 2026 · <span class="h-clock" id="clock">--:--</span> · departed 04:30 (winter time) · E10 · 50 L</div>
     <div class="progress-row">
       <span id="km-label"><b>0</b> / 1 342 km</span>
-      <span id="eta-label">ETA Pamplona ~21:15</span>
+      <span id="eta-label">ETA Pamplona ~22:05</span>
     </div>
     <div class="bar"><i id="bar"></i></div>
     <div class="next-summary" id="next-summary">
@@ -199,7 +223,39 @@
     </div>
     <ul class="wl-list" id="wl-list"></ul>
   </section>
-  <p class="lede">One dog on board. All stops on the correct (southbound) carriageway. Tap a stop to mark it done — state survives a phone lock.</p>
+  <p class="lede">One dog on board. <b>E10 petrol only</b> — the car needs no 98, so never hunt for it. Every aire sits on the southbound carriageway or is reached by a signed junction back-door (Zuasti). Tap a stop to mark it done — state survives a phone lock.</p>
+
+  <h2 class="sec" id="rng-h">Fuel &amp; range — 50 L, 6.5 L/100 km</h2>
+  <section class="rng" aria-labelledby="rng-h">
+    <div class="rr">
+      <span class="leg">Home, full tank → Maes Deurne<small>102 km</small></span>
+      <span class="res">burns 6.6 L · <b>43.4 L</b> left ≈ 667 km</span>
+      <span class="vf">fill 1</span>
+    </div>
+    <div class="rr">
+      <span class="leg">Maes → AD Larose<small>613 km · the long one</small></span>
+      <span class="res">burns 39.8 L · <b>10.2 L</b> left ≈ 156 km</span>
+      <span class="vf edge">67 km spare</span>
+    </div>
+    <div class="rr">
+      <span class="leg">Larose → Alcampo Irun<small>535 km</small></span>
+      <span class="res">burns 34.8 L · <b>15.2 L</b> left ≈ 234 km</span>
+      <span class="vf">145 km spare</span>
+    </div>
+    <div class="rr">
+      <span class="leg">Irun → Pamplona<small>90 km</small></span>
+      <span class="res">burns 5.9 L · <b>44.2 L</b> left ≈ 680 km</span>
+      <span class="vf">return leg</span>
+    </div>
+    <div class="cost">
+      <div class="cost-row"><span>Maes Deurne · 6.6 L × €1.849</span><b>€12.26</b></div>
+      <div class="cost-row"><span>AD Larose · 39.8 L × €1.990</span><b>€79.29</b></div>
+      <div class="cost-row"><span>Alcampo Irun · 34.8 L × €1.680</span><b>€58.42</b></div>
+      <div class="cost-row tot"><span>3 full fills · 81.3 L · avg €1.845/L</span><b>≈ €150</b></div>
+      <p class="disclaimer">Litres are derived, not measured: km × 6.5 L/100 km, each fill back to FULL, so you buy exactly what the leg burned. Your own figure is 6.0–7.0 L/100 km; at 7.0 the 613 km leg still arrives with 7.1 L (101 km), and it only breaks at 8.16 L/100 km. 680 km is your usable-range line — every leg is under it.</p>
+    </div>
+  </section>
+
   <div id="timeline" role="list"></div>
 
   <h2 class="sec">Emergency / practical</h2>
@@ -216,9 +272,9 @@
       <div class="t"><span class="ic">🚗</span> Toussaint traffic</div>
       <p>French school holidays 17 Oct – 2 Nov. 25 Oct is the middle weekend, so the heavy flow is the northbound return — your southbound direction is the light one. Expect company around Orléans and Bordeaux, not a jam. Bison Futé forecast not yet published; check 23–24 Oct.</p>
     </div>
-    <div class="em-item caution-item">
-      <div class="t"><span class="ic">⚠️</span> Paris Crit'Air / ZFE — open caution</div>
-      <p>Paris low-emission zone rules for a foreign-plated car on the A86/A6b transit corridor are <b>unverified for 2026</b>. If your car is an older diesel, check your Crit'Air class before departure.</p>
+    <div class="em-item">
+      <div class="t"><span class="ic">🪪</span> Paris ZFE — nothing to do for this trip</div>
+      <p>The A86/A6b transit corridor you use is <b>excluded</b> from the Paris low-emission zone. The car restriction only runs Mon–Fri 08:00–20:00 and carries no sanctions before 2027. Sunday 25 Oct, corridor only: no sticker to buy, nothing to check.</p>
     </div>
     <div class="em-item">
       <div class="t"><span class="ic">💳</span> Cards at the péage</div>
@@ -227,8 +283,9 @@
   </div>
 
   <footer>
-    <p><b>Time assumption:</b> arrival windows come from the route plan's cumulative km + dwell (OSRM free-flow, mildly pessimistic). Fuel-stop times are interpolated onto those legs — DATS 24 Harelbeke ~06:40–07:10 (per the fuel plan), Alcampo Irun ~20:05–20:20 (derived from the Irun border crossing ~20:10; the fuel plan's “~15:30” assumed a shorter route and is ignored). Alcampo's 15-min dwell may push Zuasti/Pamplona ~15 min later, still inside the 21:00–21:45 band.</p>
-    <p>Facts, coordinates, prices and names are verbatim from the two research artifacts (21 Oct 2026). Coordinates are not rounded. Mirrored (northbound-side) aires were excluded. Fuel prices are a snapshot — re-check the DATS 24 station page the evening before departure.</p>
+    <p><b>Time assumption:</b> depart 04:30 CET; drive legs at ~95 km/h free-flow average (OSRM-style, mildly pessimistic) plus the audited detour minutes (Maes +9.8, Larose +4, Zuasti back-door +2.9) and the dwell printed on each card. The extra fill is what moves the ETA from the old ~21:15 to ~22:05. Treat it as ±10 min.</p>
+    <p><b>Distance:</b> 1 342 km, one figure. The four planned legs used for the range arithmetic — 102 + 613 + 535 + 90 — sum to 1 340 km, so the headline and the legs agree to ±2 km. A corridor re-basing was not available in this run; treat the total as ±1 %.</p>
+    <p>Facts, coordinates and names are verbatim from the research artifacts. Prices: Maes Deurne and Alcampo Irun checked 21–22 Oct 2026, AD Larose from the official French feed (maj 19 Oct 2026). Coordinates are not rounded. Fuel prices are a snapshot — re-check the evening before departure.</p>
     <div class="reset-row">
       <button class="reset" id="reset" type="button">Reset trip</button>
     </div>
@@ -245,34 +302,36 @@
   var DEPART_MIN = 270; // 04:30
 
   // Arrival anchors [minutes-from-midnight, km] for clock interpolation.
-  var ANCHORS = [[270,0],[400,215],[460,271],[615,479],[750,669],[960,929],[1110,1146],[1205,1250],[1250,1329],[1275,1342]];
+  var ANCHORS = [[270,0],[345,102],[465,271],[615,479],[750,669],[830,715],[990,929],[1130,1146],[1230,1250],[1300,1329],[1325,1342]];
 
   var STOPS = [
-    { id:"harelbeke", type:"fuel", km:215, name:"DATS 24 Harelbeke",
-      road:"Kortrijksesteenweg (N43) — ~3 min off the E17, Harelbeke exit, Belgium",
-      lat:50.84637, lon:3.29638, arrive:"06:40", arriveEnd:"07:10", dwell:"refuel ~10 min",
-      chips:["Fuel 24/7","Unmanned","Card only — no cash","No shop","Free tyre inflator"],
-      dog:"Lit forecourt on the Colruyt car park, Leie corridor + roadside verges nearby. A 2-min sniff, not a park.",
-      dogRating:"Tarmac forecourt",
-      caution:"Dog verge not verified from imagery — treat as “verge likely”, check on arrival.",
-      fuel:{ brand:"DATS 24 (Colruyt Group, unmanned) — Harelbeke",
-        address:"Kortrijksesteenweg 206-2, 8530 Harelbeke, Belgium",
-        diesel:"€2.244", e10:"€1.843", extra:"Superplus 98 €2.128",
-        hours:"24/7, unmanned, no shop",
-        card:"Card at pump only — Maestro/Bancontact, Visa, Mastercard, Apple Pay, Google Pay. No cash. Pre-auth ~€100–125 — carry a second card.",
-        detour:"+4 min (~2.4 km round trip)",
-        save:"Saves €12.71 (diesel) / €33.67 (petrol) vs the Dutch pump average on a 55 L fill.",
-        lux:"Luxembourg is cheaper (diesel €2.038) but +250–300 km and 2.5–3 h, plus ~€25 extra tolls — net ~€55 loss. Skip it." },
-      wazeSearch:"DATS 24 Harelbeke Kortrijksesteenweg" },
+    { id:"maes", type:"fuel", km:102, name:"Maes Deurne",
+      road:"Waterbaan 114, 2100 Deurne, Antwerpen — ~5 km off the R1/E19 Antwerp ring",
+      lat:51.20526, lon:4.46296, arrive:"05:45", arriveEnd:"06:00", dwell:"full tank ~15 min",
+      chips:["E10 — full tank","Shop 08:00–22:00","Card at pump","Antwerp, BE"],
+      dog:"Urban forecourt on Waterbaan — no greenery verified here. Treat this as fuel only; the dog's proper leg-stretch is 169 km later at Wancourt Ouest.",
+      dogRating:"Not verified",
+      caution:"Pump access at 05:45 is UNVERIFIED: reported shop hours are 08:00–22:00 and the cards-at-pump path is documented only at brand level. If the pump is dark or refuses your card, do not hunt — Lukoil Deurne, Bisschoppenhoflaan 315 (51.23373, 4.46263), “kaartautomaat 24/24”, E10 €1.984 (17 Oct), is 0.5 km / +7 min from here.",
+      fuel:{ brand:"Maes — Deurne (Antwerpen)",
+        address:"Waterbaan 114, 2100 Antwerpen, Belgium",
+        e10:"€1.849", diesel:"€2.279", extra:null,
+        hours:"Shop 08:00–22:00 (reported) · card pump outside those hours unverified",
+        card:"Card at pump (Visa, Mastercard, Maestro, Bancontact), cash in the shop. Maes pre-auth ~€375 — carry a second card.",
+        detour:"+9.8 min vs staying on the R1 ring (measured)",
+        buy:"Full tank · ~6.6 L · €12.26",
+        tank:"Tank on arrival: 43.4 L of 50 (≈667 km left). You buy back the 6.6 L the 102 km burned.",
+        save:"14.1 c/L under Larose — worth ~€0.90 on this fill. You stop here for range, not for the saving.",
+        fallback:"Fallback, on the same ring: Lukoil Deurne, Bisschoppenhoflaan 315 — foreign-card acceptance at the Belgian automate is the same open question, so carry two.",
+        checked:"Prices checked 22 Oct 2026" },
+      wazeSearch:"Maes Waterbaan 114 Deurne" },
 
     { id:"wancourt", type:"stop", km:271, name:"Aire de Wancourt Ouest",
-      road:"A1 Autoroute du Nord, sens Paris (southbound) · ≈ PK 170 · SANEF",
-      lat:50.26222, lon:2.86299, arrive:"07:40", arriveEnd:"07:55", dwell:"15 min",
-      chips:["Parking","Picnic area",{t:"No fuel / no shop",cls:"no"},"Toilets — basic"],
+      road:"A1 Autoroute du Nord, sens Paris (southbound) · ≈ PK 170 · SANEF · footbridge to the Est side",
+      lat:50.26222, lon:2.86299, arrive:"07:45", arriveEnd:"08:00", dwell:"15 min",
+      chips:["Parking","Picnic area",{t:"No fuel / no shop",cls:"no"},{t:"Toilets — yes",cls:"ok"},"Footbridge ↔ Est"],
       dog:"Best greenery of the northern stretch — a genuine 10-min loop on grass and woodland edge. Keep the lead on (open farmland + motorway boundary).",
       dogRating:"Grass & woodland",
-      caution:"Toilets unverified: OSM says no, SANEF lists it as a repos area — expect at most basic facilities. Do not plan a fill here.",
-      fuel:null, wazeSearch:"Aire de Wancourt Ouest, A1" },
+      caution:null, fuel:null, wazeSearch:"Aire de Wancourt Ouest, A1" },
 
     { id:"limours", type:"stop", km:479, name:"Aire de Limours-Janvry",
       road:"A10 L'Aquitaine, sens Bordeaux (southbound) · ≈ PK 17–20 · Vinci/Cofiroute",
@@ -290,9 +349,29 @@
       dogRating:"Grass & woodland",
       caution:null, fuel:null, wazeSearch:"Aire de Tours La Longue Vue, A10" },
 
+    { id:"larose", type:"fuel", km:715, name:"AD Garage Larose",
+      road:"75 Route de Chinon (D760/D749), Noyant-de-Touraine — A10 exit 25 Sainte-Maure-de-Touraine, then ~2 km",
+      lat:47.10870, lon:0.58316, arrive:"13:50", arriveEnd:"14:05", dwell:"full tank ~15 min",
+      chips:["E10 — full tank","Automate 24/24","Shop shut — always","ATM on site"],
+      dog:"Farmland immediately behind the forecourt and a grass verge along the D749 within 100–200 m. No park, no fence, road traffic — a 5-min leg-stretch, map-inspected not ground-verified.",
+      dogRating:"Verge + farmland edge",
+      caution:"Foreign-card acceptance at the automate is unverified — it is a rural Total forecourt, so use chip + PIN rather than contactless, and keep the ATM on site as your fallback. No cashier, no toilet, no coffee.",
+      fuel:{ brand:"AD Garage Larose (TotalEnergies forecourt)",
+        address:"75 Route de Chinon, 37800 Noyant-de-Touraine, France",
+        e10:"€1.990", diesel:"€2.250", extra:null,
+        hours:"Card automate 24/24, 7/7 · shop closed every day — Sunday is no different",
+        card:"Automate CB 24/24 (Visa/Mastercard/CB, chip + PIN). ATM on site. Foreign-card acceptance unverified.",
+        detour:"+2.4 km / +4 min — exit 25, toll plaza sits in Noyant-de-Touraine",
+        buy:"Full tank · ~39.8 L · €79.29",
+        tank:"Tank on arrival: 10.2 L of 50 (≈156 km). This is the leg that matters — 613 km against your 680 km line, 67 km of margin; it only breaks at 8.16 L/100 km.",
+        save:"57 c/L under the southbound Tours-La Longue Vue aire (€2.559) → ~€22.7 on 40 L, against ~€0.35 of detour fuel. The southbound/northbound price split is an inference, not a pump reading.",
+        fallback:null,
+        checked:"Official feed maj 19 Oct 2026" },
+      wazeSearch:"AD Garage Larose Noyant-de-Touraine" },
+
     { id:"stleger", type:"stop", km:929, name:"Aire de Saint-Léger Ouest",
       road:"A10, sens Bordeaux · ≈ PK 468 · Vinci/ASF",
-      lat:45.61118, lon:-0.60231, arrive:"16:00", arriveEnd:"16:15", dwell:"15 min",
+      lat:45.61118, lon:-0.60231, arrive:"16:30", arriveEnd:"16:45", dwell:"15 min",
       chips:["Fuel 24/7","2 fast food","Toilets ×3","EV ×1"],
       dog:"Short grass strip and a perimeter track (vineyard/woodland edge). Pee-and-sniff, not a hike.",
       dogRating:"Verge + track",
@@ -300,7 +379,7 @@
 
     { id:"ocean", type:"stop", km:1146, name:"Aire de l'Océan-Ouest",
       road:"A63 Autoroute des Landes, sens Bayonne/Espagne · Vinci/ASF",
-      lat:43.93696, lon:-1.09315, arrive:"18:30", arriveEnd:"18:55", dwell:"25 min",
+      lat:43.93696, lon:-1.09315, arrive:"18:50", arriveEnd:"19:15", dwell:"25 min",
       chips:["Fuel 24/7","Shop 24/7","Toilets ×3","EV ×3"],
       dog:"Landes pine forest on three sides — the best off-lead-ish sniffing of the day. Dusk (~19:00): take a headtorch or use phone light.",
       dogRating:"Pine forest",
@@ -308,28 +387,31 @@
 
     { id:"alcampo", type:"fuel", km:1250, name:"Alcampo Irun",
       road:"Parque Comercial Txingudi — ~2 km off the AP-8 at the Irun/Txingudi exit",
-      lat:43.32258, lon:-1.83472, arrive:"20:05", arriveEnd:"20:20", dwell:"refuel + break ~15 min",
-      chips:["Fuel","Hypermarket","Cafés","Toilets","Large lit car park"],
+      lat:43.32258, lon:-1.83472, arrive:"20:30", arriveEnd:"20:45", dwell:"full tank + break ~15 min",
+      chips:["E10 — full tank","Hypermarket","Cafés","Toilets","Large lit car park"],
       dog:"Best break of the drive — retail-park edges with grass strips. Recommended as a 15-min dog stop.",
       dogRating:"Grass strips",
       caution:"Backup Zabaleta (Zaisa II, Irun): Sunday hours unverified — check on the day. (Bidasoil on N-121-A is a third option if both are shut.)",
-      fuel:{ brand:"Alcampo (Auchan hypermarket forecourt) — Irun",
+      fuel:{ brand:"Alcampo — Irun (Auchan hypermarket forecourt)",
         address:"Parque Comercial Txingudi, Zona Araso B, Ventas 80, 20305 Irun, Gipuzkoa, Spain",
-        diesel:"€1.769", e10:"€1.669–1.679", extra:null,
+        e10:"€1.680", diesel:"€1.769", extra:null,
         hours:"Mon–Sun 06:00–00:00",
         card:"Card at pump / kiosk (Visa, Mastercard, Spanish debit); staffed most of the day.",
         detour:"+4 min (~2 km off the AP-8)",
-        save:"Saves €31.79 (diesel) / €24.64 (petrol) vs the French average on a 55 L fill.",
-        lux:null },
+        buy:"Full tank · ~34.8 L · €58.42",
+        tank:"Tank on arrival: 15.2 L of 50 (≈234 km). After the 90 km to Pamplona you park with ~44 L — the return leg is already paid for.",
+        save:"31 c/L under Larose — cheapest of the three fills. Also your last fill before Spain's Sunday, so take the full tank.",
+        fallback:null,
+        checked:"Prices checked 21 Oct 2026" },
       wazeSearch:"Alcampo Irun Txingudi" },
 
     { id:"zuasti", type:"stop", km:1329, name:"Área de servicio de Zuasti",
-      road:"A-15, sentido Pamplona (southbound) · ≈ 20 km before Pamplona",
-      lat:42.86204, lon:-1.74404, arrive:"20:50", arriveEnd:"21:00", dwell:"10 min",
-      chips:["Fuel (not 24/7)","Café/restaurant","Toilets","Shop"],
+      road:"A-15 southbound frontage, single facility for both directions — reached via the Zuasti junction back-door, not a plain on-carriageway pull-in · ≈ 20 km before Pamplona",
+      lat:42.86204, lon:-1.74404, arrive:"21:40", arriveEnd:"21:50", dwell:"10 min",
+      chips:["Fuel (not 24/7)","Café/restaurant","Toilets","Shop","+1.17 km back-door"],
       dog:"Open grassland, scrub and a patch of woodland; the Zuasti golf-course hamlet is behind the parking. Flat, quiet — 10 min of grass.",
       dogRating:"Grass & scrub",
-      caution:"Open at 20:50 but not 24/7 in the small hours. If you run past 21:30, skip it — the last 12 km is 15 min and the dog will sleep.",
+      caution:"One facility on the San Sebastián-bound frontage: you leave the A-15 at the Zuasti junction and rejoin, +1.17 km / +2.9 min. It is not open 24/7 either — you get there at 21:40. If it looks shut, don't hunt: the last 13 km is 15 min and the dog will sleep.",
       fuel:null, wazeSearch:"Area de servicio de Zuasti, A-15" }
   ];
 
@@ -434,21 +516,21 @@
       var fuel = "";
       if(s.fuel){
         var f = s.fuel;
-        var lux = f.lux ? '<details class="lux"><summary>Luxembourg not worth it</summary><p>'+esc(f.lux)+'</p></details>' : "";
         fuel = '<div class="fuel">'
           + '<div class="brand">'+esc(f.brand)+'</div>'
           + '<div class="addr">'+esc(f.address)+'</div>'
           + '<div class="prices">'
-            + '<div class="price"><div class="t">Diesel B7 / A</div><div class="v">'+esc(f.diesel)+'</div></div>'
             + '<div class="price"><div class="t">E10 / 95</div><div class="v">'+esc(f.e10)+'</div></div>'
-            + (f.extra ? '<div class="price"><div class="t">98</div><div class="v">'+esc(f.extra)+'</div></div>' : '')
+            + '<div class="price"><div class="t">Diesel (ref)</div><div class="v" style="color:var(--muted);">'+esc(f.diesel)+'</div></div>'
           + '</div>'
           + '<ul><li><b>Hours:</b> '+esc(f.hours)+'</li>'
           + '<li><b>Card:</b> '+esc(f.card)+'</li>'
-          + '<li><b>Detour:</b> '+esc(f.detour)+'</li></ul>'
+          + '<li><b>Detour:</b> '+esc(f.detour)+'</li>'
+          + '<li><b>This fill:</b> '+esc(f.buy)+'</li></ul>'
+          + '<div class="tank">'+esc(f.tank)+'</div>'
           + '<div class="save">'+esc(f.save)+'</div>'
-          + '<div class="disclaimer">Prices checked 21 Oct 2026 · re-check the evening before departure.</div>'
-          + lux
+          + (f.fallback ? '<div class="fb">'+esc(f.fallback)+'</div>' : '')
+          + '<div class="disclaimer">'+esc(f.checked)+' · E10 only, no 98 needed · re-check before departure.</div>'
           + '</div>';
       }
 
@@ -488,7 +570,7 @@
           + '<div class="km-badge"><div class="k">1 342</div><div class="l">km</div></div>'
           + '<div class="stop-title">'
             + '<div class="stop-name">Pamplona</div>'
-            + '<div class="stop-road">PA-30 — arrive ~21:15 (band 21:00–21:45)</div>'
+            + '<div class="stop-road">PA-30 — arrive ~22:05 (band 21:50–22:25) · 13 km from Zuasti</div>'
           + '</div>'
         + '</div>'
       + '</div>'
@@ -527,7 +609,7 @@
     if(nxt){
       el.nextText.innerHTML = "<b>" + esc(nxt.name) + "</b> · ETA ~" + esc(nxt.arrive) + " · km " + nxt.km
         + (isTrip && min < DEPART_MIN ? " · departs 04:30" : "");
-      el.etaLabel.textContent = "Next stop km " + nxt.km + " · ETA 21:15";
+      el.etaLabel.textContent = "Next stop km " + nxt.km + " · ETA 22:05";
     } else {
       el.nextText.innerHTML = "<b>Arrived — Pamplona.</b> Drive safely, the dog thanks you.";
       el.etaLabel.textContent = "1 342 / 1 342 km";
