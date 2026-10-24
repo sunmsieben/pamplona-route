@@ -197,6 +197,40 @@
   .cost-row.tot{margin-top:6px;padding-top:8px;border-top:1px solid var(--border);}
   .cost-row.tot span{color:var(--text);font-weight:600;}
   .cost-row.tot b{color:var(--done);font-size:1.02rem;}
+
+  /* ---------- Whole-route link (one tap, all stops) ---------- */
+  .route-go{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px;margin:14px 0 4px;}
+  .route-go-h{margin:0 0 8px;font-size:.78rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--muted);}
+  .btn-route{display:flex;align-items:center;justify-content:center;text-align:center;
+    min-height:56px;width:100%;padding:10px 14px;border-radius:12px;text-decoration:none;
+    background:var(--done);color:#04121f;font-size:1.02rem;font-weight:800;line-height:1.25;
+    border:1px solid transparent;}
+  .btn-route:focus-visible,.btn-copy:focus-visible{outline:2px solid var(--waze);outline-offset:2px;}
+  .route-note{margin:8px 0 0;font-size:.82rem;line-height:1.4;color:var(--muted);}
+  .route-note b{color:var(--text);}
+  .route-drop{margin:8px 0 0;font-size:.82rem;line-height:1.4;border-radius:9px;padding:7px 10px;
+    background:rgba(211,153,34,.12);border:1px solid rgba(211,153,34,.35);color:#e8c07a;}
+  .route-drop[hidden]{display:none;}
+  .route-copy{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .btn-copy{min-height:48px;flex:1 1 auto;padding:0 14px;border-radius:10px;cursor:pointer;
+    background:var(--card2);border:1px solid var(--border);color:var(--text);
+    font-size:.94rem;font-weight:600;}
+  .btn-copy.copied{background:rgba(63,185,80,.16);border-color:rgba(63,185,80,.5);color:var(--done);}
+  .route-copied{flex:1 1 100%;font-size:.8rem;color:var(--muted);min-height:0;}
+  .copy-fallback{margin-top:10px;}
+  .copy-fallback[hidden]{display:none;}
+  .copy-fallback label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px;}
+  .copy-field{width:100%;max-width:100%;min-height:48px;padding:8px 10px;border-radius:9px;
+    background:var(--bg);border:1px solid var(--border);color:var(--text);
+    font-size:.8rem;line-height:1.35;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+
+  /* ---------- Static corridor strip (schematic, no map) ---------- */
+  .strip{margin:14px 0 0;padding-top:10px;border-top:1px dashed var(--border);}
+  .strip-cap{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;
+    margin:0 0 6px;line-height:1.4;}
+  .strip svg{display:block;width:100%;max-width:340px;height:auto;margin:0 auto;}
 </style>
 </head>
 <body>
@@ -218,6 +252,69 @@
 </header>
 
 <div class="wrap">
+  <section class="route-go" aria-labelledby="route-go-h">
+    <h2 class="route-go-h" id="route-go-h">Whole route in one tap</h2>
+    <a class="btn-route" id="route-link" href="https://www.google.com/maps/dir/?api=1" rel="noopener">Open full route in Google Maps — starts from where you are</a>
+    <p class="route-note">No start point is pinned, so Maps begins at your phone's current location on the day. Google Maps takes at most <b>9 waypoints</b> besides start and finish — <span id="route-fit">all 9 intermediate stops fit</span>.</p>
+    <p class="route-drop" id="route-drop" hidden></p>
+    <div class="route-copy">
+      <button class="btn-copy" id="route-copy" type="button">Copy route link</button>
+      <span class="route-copied" id="route-copied" role="status" aria-live="polite"></span>
+    </div>
+    <div class="copy-fallback" id="copy-fallback" hidden>
+      <label for="route-url">Clipboard blocked — select this link and copy it by hand:</label>
+      <input class="copy-field" id="route-url" type="text" readonly inputmode="none" aria-label="Full Google Maps route link">
+    </div>
+    <p class="route-note">Waze has no multi-stop link, so this route-in-one-go is Google Maps only — the Waze buttons below still navigate each leg.</p>
+    <div class="strip">
+      <p class="strip-cap">Schematic, not to scale · amber = fuel fill · green = destination</p>
+      <svg viewBox="0 0 320 244" width="320" height="244" role="img" aria-label="Schematic corridor from Rotterdam, km 0, south to Pamplona, km 1342, with the 9 planned stops as ticks and their km markers.">
+        <line x1="26" y1="12" x2="26" y2="232" stroke="#30363d" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="26" cy="16" r="3.5" fill="#9198a1"/>
+        <text x="42" y="20" font-size="10.5" fill="#9198a1">Rotterdam — home, 0 km, depart 04:30</text>
+
+        <circle cx="26" cy="38" r="4.5" fill="#d29922"/>
+        <text x="42" y="42" font-size="11.5" fill="#e6edf3">Gabriëls Deurne<tspan font-size="10.5" fill="#9198a1"> · Antwerpen</tspan></text>
+        <text x="312" y="42" font-size="10.5" fill="#9198a1" text-anchor="end">97.5</text>
+
+        <circle cx="26" cy="59" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
+        <text x="42" y="63" font-size="11.5" fill="#e6edf3">Aire de Wancourt Ouest<tspan font-size="10.5" fill="#9198a1"> · Arras</tspan></text>
+        <text x="312" y="63" font-size="10.5" fill="#9198a1" text-anchor="end">271</text>
+
+        <circle cx="26" cy="80" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
+        <text x="42" y="84" font-size="11.5" fill="#e6edf3">Aire de Limours-Janvry<tspan font-size="10.5" fill="#9198a1"> · Paris bypass</tspan></text>
+        <text x="312" y="84" font-size="10.5" fill="#9198a1" text-anchor="end">479</text>
+
+        <circle cx="26" cy="101" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
+        <text x="42" y="105" font-size="11.5" fill="#e6edf3">Aire de Tours-La Longue Vue</text>
+        <text x="312" y="105" font-size="10.5" fill="#9198a1" text-anchor="end">669</text>
+
+        <circle cx="26" cy="122" r="4.5" fill="#d29922"/>
+        <text x="42" y="126" font-size="11.5" fill="#e6edf3">AD Garage Larose<tspan font-size="10.5" fill="#9198a1"> · Chinon</tspan></text>
+        <text x="312" y="126" font-size="10.5" fill="#9198a1" text-anchor="end">715</text>
+
+        <circle cx="26" cy="143" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
+        <text x="42" y="147" font-size="11.5" fill="#e6edf3">Aire de Saint-Léger Ouest<tspan font-size="10.5" fill="#9198a1"> · Bordeaux</tspan></text>
+        <text x="312" y="147" font-size="10.5" fill="#9198a1" text-anchor="end">929</text>
+
+        <circle cx="26" cy="164" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
+        <text x="42" y="168" font-size="11.5" fill="#e6edf3">Aire de l'Océan-Ouest<tspan font-size="10.5" fill="#9198a1"> · Landes</tspan></text>
+        <text x="312" y="168" font-size="10.5" fill="#9198a1" text-anchor="end">1 146</text>
+
+        <circle cx="26" cy="185" r="4.5" fill="#d29922"/>
+        <text x="42" y="189" font-size="11.5" fill="#e6edf3">Alcampo Irun<tspan font-size="10.5" fill="#9198a1"> · Irun</tspan></text>
+        <text x="312" y="189" font-size="10.5" fill="#9198a1" text-anchor="end">1 250</text>
+
+        <circle cx="26" cy="206" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
+        <text x="42" y="210" font-size="11.5" fill="#e6edf3">Área de servicio de Zuasti<tspan font-size="10.5" fill="#9198a1"> · A-15</tspan></text>
+        <text x="312" y="210" font-size="10.5" fill="#9198a1" text-anchor="end">1 329</text>
+
+        <circle cx="26" cy="227" r="5.5" fill="#3fb950"/>
+        <text x="42" y="231" font-size="11.5" fill="#3fb950" font-weight="700">Pamplona<tspan font-size="10.5" fill="#9198a1" font-weight="400"> · destination</tspan></text>
+        <text x="312" y="231" font-size="10.5" fill="#9198a1" text-anchor="end">1 342</text>
+      </svg>
+    </div>
+  </section>
   <section class="wl" aria-labelledby="wl-title">
     <div class="wl-head">
       <span class="wl-title" id="wl-title">All stops → Waze</span>
@@ -433,7 +530,14 @@
     timeline: document.getElementById("timeline"),
     reset: document.getElementById("reset"),
     wlList: document.getElementById("wl-list"),
-    wlToggle: document.getElementById("wl-toggle")
+    wlToggle: document.getElementById("wl-toggle"),
+    routeLink: document.getElementById("route-link"),
+    routeCopy: document.getElementById("route-copy"),
+    routeCopied: document.getElementById("route-copied"),
+    copyFallback: document.getElementById("copy-fallback"),
+    routeUrl: document.getElementById("route-url"),
+    routeDrop: document.getElementById("route-drop"),
+    routeFit: document.getElementById("route-fit")
   };
 
   function pad(n){ return (n<10?"0":"")+n; }
@@ -463,6 +567,53 @@
 
   function waze(lat,lon){ return "https://waze.com/ul?ll="+lat+","+lon+"&navigate=yes"; }
   function gmaps(lat,lon){ return "https://maps.google.com/?q="+lat+","+lon; }
+
+  // ---- Whole-route deep link: every stop as one waypoint, Google Maps only ----
+  // Google's directions URL API accepts 9 waypoints besides start and finish. If a stop is
+  // ever added, drop the least important intermediates instead of shipping a broken link:
+  // the three fills and the final stop before Pamplona are pinned, the rest are
+  // sacrificed from the middle of the run outward. Dropped stops are named on the page.
+  var MAX_WAYPOINTS = 9;
+  var ROUTE_PINNED = ["gabriels","larose","alcampo"];
+
+  // 5 dp, matching the page's own literals — a bare number would turn 47.10870 into 47.1087.
+  function coord(s){ return s.lat.toFixed(5) + "," + s.lon.toFixed(5); }
+
+  function routePlan(){
+    var stops = STOPS.slice();
+    var dropped = [];
+    if(stops.length > MAX_WAYPOINTS){
+      var pin = {};
+      ROUTE_PINNED.forEach(function(id){ pin[id] = true; });
+      pin[stops[stops.length-1].id] = true;
+      var mid = (stops.length - 1) / 2;
+      var spare = stops.filter(function(s){ return !pin[s.id]; })
+        .sort(function(a,b){
+          return Math.abs(stops.indexOf(a)-mid) - Math.abs(stops.indexOf(b)-mid);
+        });
+      var drop = {};
+      var overflow = stops.length - MAX_WAYPOINTS;
+      for(var i=0; i<spare.length && dropped.length<overflow; i++){
+        drop[spare[i].id] = true;
+        dropped.push(spare[i]);
+      }
+      stops = stops.filter(function(s){ return !drop[s.id]; });
+      if(stops.length > MAX_WAYPOINTS){   // pathological: everything pinned
+        stops = [stops[0]].concat(stops.slice(stops.length - (MAX_WAYPOINTS - 1)));
+      }
+    }
+    return { stops: stops, dropped: dropped };
+  }
+
+  // No origin on purpose: the drive starts wherever the phone is on the day.
+  function routeURL(plan){
+    return "https://www.google.com/maps/dir/?api=1&destination=" + coord(PAMPLONA)
+      + "&waypoints=" + plan.stops.map(coord).join("|")
+      + "&travelmode=driving";
+  }
+
+  var ROUTE = routePlan();
+  var ROUTE_URL = routeURL(ROUTE);
 
   function chipHTML(c){
     if(typeof c === "string") return '<span class="chip">'+esc(c)+'</span>';
@@ -499,6 +650,92 @@
 
   buildWazeList();
   applyWl();
+
+  // ---- Route link + clipboard (with manual-select fallback, no dialogs) ----
+  (function initRoute(){
+    if(el.routeLink) el.routeLink.href = ROUTE_URL;
+    if(el.routeUrl) el.routeUrl.value = ROUTE_URL;
+
+    if(el.routeDrop && ROUTE.dropped.length){
+      el.routeDrop.hidden = false;
+      el.routeDrop.textContent = "To stay inside Google's " + MAX_WAYPOINTS + "-waypoint limit this link "
+        + "leaves out " + ROUTE.dropped.map(function(s){ return s.name; }).join(", ")
+        + " — open it from the Waze list below.";
+    }
+    if(el.routeFit){
+      el.routeFit.textContent = ROUTE.dropped.length
+        ? MAX_WAYPOINTS + " of " + (ROUTE.stops.length + ROUTE.dropped.length)
+          + " intermediate stops fit — " + ROUTE.dropped.length + " left out below"
+        : "all " + ROUTE.stops.length + " intermediate stops fit";
+    }
+
+    var timer = null;
+
+    function restore(){
+      timer = null;
+      if(el.routeCopy){ el.routeCopy.textContent = "Copy route link"; el.routeCopy.classList.remove("copied"); }
+    }
+
+    function copied(){
+      if(!el.routeCopy) return;
+      if(timer) clearTimeout(timer);
+      el.routeCopy.textContent = "Site link copied ✓";
+      el.routeCopy.classList.add("copied");
+      if(el.routeCopied) el.routeCopied.textContent = "Route link on the clipboard — paste it into WhatsApp.";
+      timer = setTimeout(restore, 2600);
+    }
+
+    function showFallback(){
+      if(el.routeCopied) el.routeCopied.textContent = "";
+      if(!el.copyFallback){ return; }
+      el.copyFallback.hidden = false;
+      if(!el.routeUrl) return;
+      el.routeUrl.focus();
+      try { el.routeUrl.select(); } catch(e){}
+    }
+
+    // Deprecated API, still the only path when navigator.clipboard is blocked or absent.
+    function legacyCopy(){
+      var t = document.createElement("textarea");
+      t.value = ROUTE_URL;
+      t.setAttribute("readonly", "");
+      t.style.position = "fixed";
+      t.style.top = "-1000px";
+      t.style.opacity = "0";
+      document.body.appendChild(t);
+      var ok = false;
+      try { t.select(); ok = document.execCommand("copy"); } catch(e){ ok = false; }
+      document.body.removeChild(t);
+      return ok;
+    }
+
+    function writeClipboard(){
+      var p = null;
+      try {
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          p = navigator.clipboard.writeText(ROUTE_URL);
+        }
+      } catch(e){ p = null; }
+
+      if(p && typeof p.then === "function"){
+        p.then(copied, function(){
+          if(legacyCopy()) copied(); else showFallback();
+        });
+      } else if(legacyCopy()){
+        copied();
+      } else {
+        showFallback();
+      }
+    }
+
+    if(el.routeCopy) el.routeCopy.addEventListener("click", writeClipboard);
+
+    if(el.routeUrl){
+      el.routeUrl.addEventListener("click", function(){
+        try { el.routeUrl.select(); } catch(e){}
+      });
+    }
+  })();
 
   function renderTimeline(clockCurrentId, nextId){
     var html = "";
