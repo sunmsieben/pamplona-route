@@ -1,0 +1,9 @@
+97.5 | Gabriëls Deurne (E10) | https://waze.com/ul?ll=51.23585,4.48494&navigate=yes
+271 | Aire de Wancourt Ouest | https://waze.com/ul?ll=50.26222,2.86299&navigate=yes
+479 | Aire de Limours-Janvry | https://waze.com/ul?ll=48.63609,2.14652&navigate=yes
+617 | Aire de Blois-Villerbon (lunch) | https://waze.com/ul?ll=47.66448,1.38590&navigate=yes
+715 | AD Garage Larose (E10, fuel only) | https://waze.com/ul?ll=47.10870,0.58316&navigate=yes
+929 | Aire de Saint-Léger Ouest | https://waze.com/ul?ll=45.61118,-0.60231&navigate=yes
+1146 | Aire de l'Océan-Ouest | https://waze.com/ul?ll=43.93696,-1.09315&navigate=yes
+1249 | Bidasoil Behobia (95 E5, last stop before Pamplona) | https://waze.com/ul?ll=43.33581,-1.75271&navigate=yes
+1342 | Pamplona | https://waze.com/ul?ll=42.81253,-1.64577&navigate=yes
