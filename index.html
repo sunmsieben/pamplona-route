@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d1117">
-<meta name="description" content="Rotterdam → Pamplona by car, Sunday 25 Oct 2026 · 1 342 km, one dog, 8 stops, E10 on a 50 L tank. Depart 04:30, ETA Pamplona ~21:45.">
+<meta name="description" content="Rotterdam → Pamplona by car, Sunday 25 Oct 2026 · 1 342 km, one dog, 8 stops, E10 on a 50 L tank. Depart 04:30, ETA Pamplona ~21:41.">
 
 <!-- Open Graph / Twitter (WhatsApp link preview) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Rotterdam → Pamplona · Sun 25 Oct 2026">
-<meta property="og:description" content="Car trip with one dog · 1 342 km · E10, 50 L tank, 3 fills · depart 04:30 · ETA ~21:45. 5 aires + 3 fuel stops, straight Irun → Pamplona, live clock, per-stop Waze links.">
+<meta property="og:description" content="Car trip with one dog · 1 342 km · E10, 50 L tank, 3 fills · depart 04:30 · ETA ~21:41. 8 stops (4 breaks, 1 lunch, 3 fills), straight Irun → Pamplona, live clock, per-stop Waze links.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Rotterdam → Pamplona · Sun 25 Oct 2026">
-<meta name="twitter:description" content="Car trip with one dog · 1 342 km · E10, 3 fills, 650–680 km usable range · depart 04:30 · ETA ~21:45. 8 stops, live clock, per-stop Waze links.">
+<meta name="twitter:description" content="Car trip with one dog · 1 342 km · E10, 3 fills, 650–680 km usable range · depart 04:30 · ETA ~21:41. 8 stops, live clock, per-stop Waze links.">
 
 <title>Rotterdam → Pamplona · Sun 25 Oct 2026</title>
 
@@ -208,6 +208,11 @@
     background:var(--done);color:#04121f;font-size:1.02rem;font-weight:800;line-height:1.25;
     border:1px solid transparent;}
   .btn-route:focus-visible,.btn-copy:focus-visible{outline:2px solid var(--waze);outline-offset:2px;}
+  .btn-route.alt{background:var(--card2);color:var(--text);border-color:var(--border);
+    font-size:.98rem;font-weight:700;}
+  .route-alt{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px;margin:10px 0 4px;}
+  .route-facts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;}
   .route-note{margin:8px 0 0;font-size:.82rem;line-height:1.4;color:var(--muted);}
   .route-note b{color:var(--text);}
   .route-drop{margin:8px 0 0;font-size:.82rem;line-height:1.4;border-radius:9px;padding:7px 10px;
@@ -243,7 +248,7 @@
       <span id="km-label"><b>0</b> / 1 342 km</span>
     </div>
     <div class="bar"><i id="bar"></i></div>
-    <div class="eta-line" id="eta-label">Next stop 97.5 km · Pamplona ETA 21:45</div>
+    <div class="eta-line" id="eta-label">Next stop 97.5 km · Pamplona ETA 21:41</div>
     <div class="next-summary" id="next-summary">
       <div class="lbl">Next stop</div>
       <div id="next-text">Loading…</div>
@@ -286,8 +291,8 @@
         <text x="312" y="89" font-size="10.5" fill="#9198a1" text-anchor="end">479</text>
 
         <circle cx="26" cy="108" r="3.5" fill="#0d1117" stroke="#9198a1" stroke-width="2"/>
-        <text x="42" y="112" font-size="11.5" fill="#e6edf3">Aire de Tours-La Longue Vue</text>
-        <text x="312" y="112" font-size="10.5" fill="#9198a1" text-anchor="end">669</text>
+        <text x="42" y="112" font-size="11.5" fill="#e6edf3">Aire de Blois-Villerbon<tspan font-size="10.5" fill="#9198a1"> · lunch</tspan></text>
+        <text x="312" y="112" font-size="10.5" fill="#9198a1" text-anchor="end">617</text>
 
         <circle cx="26" cy="131" r="4.5" fill="#d29922"/>
         <text x="42" y="135" font-size="11.5" fill="#e6edf3">AD Garage Larose<tspan font-size="10.5" fill="#9198a1"> · Chinon</tspan></text>
@@ -310,6 +315,19 @@
         <text x="312" y="230" font-size="10.5" fill="#9198a1" text-anchor="end">1 342</text>
       </svg>
     </div>
+  </section>
+  <section class="route-alt" aria-labelledby="route-alt-h">
+    <h2 class="route-go-h" id="route-alt-h">Optional final leg — N-121-A mountain road</h2>
+    <a class="btn-route alt" id="route-alt-link" href="https://www.google.com/maps/dir/?api=1" rel="noopener">Final leg via N-121-A mountain road — free, ~10 min slower</a>
+    <p class="route-note">The same route as above plus one extra waypoint, <b>Doneztebe / Santesteban</b> (43.17218, −1.66974), which pins the N-121-A through Endarlatsa, Bera and the Belate tunnel instead of the AP-8/A-15. It is a different drive, <b>not a shortcut</b>.</p>
+    <div class="route-facts">
+      <span class="chip ok">11 km shorter</span>
+      <span class="chip ok">~€5–6 toll saved</span>
+      <span class="chip warn">6–10 min slower</span>
+      <span class="chip">9 of 9 waypoints</span>
+    </div>
+    <p class="route-drop">Belate/Almandoz tunnel night works can divert you over the old <b>NA-1210 pass (+15–20 min)</b> — check navarra.es or the tunnel signs on the day.</p>
+    <p class="route-drop">Wild boar and roe deer are a real risk in Navarra after dark — the Ultzama/Baztan valleys are boar country. If you take this line at 21:00, drop your speed and lead with the lights.</p>
   </section>
   <section class="wl" aria-labelledby="wl-title">
     <div class="wl-head">
@@ -382,8 +400,8 @@
   </div>
 
   <footer>
-    <p><b>Time assumption:</b> depart 04:30 CET; drive legs at ~95 km/h free-flow average (OSRM-style, mildly pessimistic) plus the audited detour minutes (Gabriëls +10.2, Larose +4, Alcampo Irun +4) and the dwell printed on each card. The final leg is Irun → Pamplona, 92 km ≈ 58 min: leave Alcampo at 20:45 and you arrive ~21:45 (band 21:30–22:00), with no stop in between. The extra Spanish fill is what moved the arrival from the old ~21:15; treat it as ±10 min.</p>
-    <p><b>Distance:</b> 1 342 km, one figure. The four planned legs used for the range arithmetic — 97.5 + 617.5 + 535 + 92 — sum to 1 342 km, exactly the headline. A corridor re-basing was not available in this run; treat the total as ±1 %.</p>
+    <p><b>Time assumption:</b> depart 04:30 CET; drive legs at ~95 km/h free-flow average (OSRM-style, mildly pessimistic) plus the audited detour minutes (Gabriëls +10.2, Larose +4, Alcampo Irun +4) and the dwell printed on each card — Blois is the only long one, 45 min for lunch. Leave Alcampo Irun at 20:41 for the final 92 km; headline arrival <b>~21:41 (band 21:25–21:55)</b> on the motorway line (AP-8 → A-15 → AP-15), no stop in between. The N-121-A mountain-road variant is <b>~10 min later (~21:51)</b>: 11 km shorter and toll-free, but its 50–70 km/h Bidasoa gorge, the Belate climb and 6 km of Pamplona streets cost more than the km save. The final leg is modelled at ~60 min while the router audit measured 66–72 min for the same road, so read 21:41 as the optimistic end of that band and treat the whole figure as ±10 min.</p>
+    <p><b>Distance:</b> 1 342 km, one figure. The four planned legs used for the range arithmetic — 97.5 + 617.5 + 535 + 92 — sum to 1 342 km, exactly the headline. A corridor re-basing was not available in this run; treat the total as ±1 %. The final leg is 92 km on the motorway and 82 km on the N-121-A, both ending at the same Pamplona point.</p>
     <p>Facts, coordinates and names are verbatim from the research artifacts. Prices: Gabriëls Deurne checked 24 Oct 2026, Alcampo Irun 21 Oct 2026, AD Larose from the official French feed (maj 19 Oct 2026). Coordinates are not rounded. Fuel prices are a snapshot — re-check the evening before departure.</p>
     <div class="reset-row">
       <button class="reset" id="reset" type="button">Reset trip</button>
@@ -399,9 +417,11 @@
   var LIST_KEY = STORE_KEY + "-wazelist";  // collapsed/expanded flag, kept separate from the done-array key
   var TOTAL_KM = 1342;
   var DEPART_MIN = 270; // 04:30
+  var ARRIVAL = "21:41"; // motorway line; the N-121-A variant is ~10 min later
+  var ARRIVAL_BAND = "21:25–21:55";
 
   // Arrival anchors [minutes-from-midnight, km] for clock interpolation.
-  var ANCHORS = [[270,0],[342,97.5],[465,271],[615,479],[750,669],[830,715],[990,929],[1130,1146],[1230,1250],[1305,1342]];
+  var ANCHORS = [[270,0],[342,97.5],[465,271],[615,479],[721,617],[831,715],[986,929],[1126,1146],[1226,1250],[1301,1342]];
 
   var STOPS = [
     { id:"gabriels", type:"fuel", km:97.5, name:"Gabriëls Deurne",
@@ -440,21 +460,21 @@
       dogRating:"Tarmac + verge",
       caution:null, fuel:null, wazeSearch:"Aire de Limours Janvry, A10" },
 
-    { id:"tours", type:"stop", km:669, name:"Aire de Tours-La Longue Vue",
-      road:"A10 L'Aquitaine, sens Bordeaux · ≈ PK 208 · Vinci Autoroutes",
-      lat:47.47516, lon:0.77545, arrive:"12:30", arriveEnd:"13:15", dwell:"45 min", lunch:true,
-      chips:["Fuel 24/7","Shop","3 restaurants","Toilets","EV ×8"],
-      dog:"Pick of the day — a proper 25–35 min leg-stretch loop (grass bank behind the parking + a track into the fields). Shade if warm, shelter if not.",
-      dogRating:"Grass & woodland",
-      caution:null, fuel:null, wazeSearch:"Aire de Tours La Longue Vue, A10" },
+    { id:"blois", type:"stop", km:617, name:"Aire de Blois-Villerbon",
+      road:"A10 L'Aquitaine, direction Tours (southbound) · Vinci Autoroutes",
+      lat:47.66448, lon:1.38590, arrive:"12:01", arriveEnd:"12:46", dwell:"lunch ~45 min", lunch:true,
+      chips:["Burger King 11:00–22:00 daily","Territoires de France","Shell Select shop 24 h",{t:"Toilets — yes",cls:"ok"},"Ionity ×13","Playground"],
+      dog:"Grass strip and forest edge within ~400 m — map-inspected, and the count includes the adjoining hamlet, so treat it as a sniff-and-pee stop, not a walk. 20 min is enough. No shade guarantee.",
+      dogRating:"Grass & forest edge",
+      caution:null, fuel:null, wazeSearch:"Aire de Blois Villerbon, A10" },
 
     { id:"larose", type:"fuel", km:715, name:"AD Garage Larose",
       road:"75 Route de Chinon (D760/D749), Noyant-de-Touraine — A10 exit 25 Sainte-Maure-de-Touraine, then ~2 km",
-      lat:47.10870, lon:0.58316, arrive:"13:50", arriveEnd:"14:05", dwell:"full tank ~15 min",
-      chips:["E10 — full tank","Automate 24/24","Shop shut — always","ATM on site"],
+      lat:47.10870, lon:0.58316, arrive:"13:51", arriveEnd:"14:01", dwell:"fuel only ~10 min",
+      chips:["E10 — full tank","Automate 24/24",{t:"No toilet · no shop",cls:"no"},{t:"No coffee",cls:"no"},"ATM on site"],
       dog:"Farmland immediately behind the forecourt and a grass verge along the D749 within 100–200 m. No park, no fence, road traffic — a 5-min leg-stretch, map-inspected not ground-verified.",
       dogRating:"Verge + farmland edge",
-      caution:"Foreign-card acceptance at the automate is unverified — it is a rural Total forecourt, so use chip + PIN rather than contactless, and keep the ATM on site as your fallback. No cashier, no toilet, no coffee.",
+      caution:"Fuel only, ~10 min: card automate, no shop, no toilet, no coffee, no staff — Sunday is no different. Blois (12:46) to the next toilet at Saint-Léger (16:26) is 3 h 40 with nothing in between, so use the toilet at Blois before you leave. Foreign-card acceptance at the automate is unverified — chip + PIN, not contactless; the ATM on site is your fallback.",
       fuel:{ brand:"AD Garage Larose (TotalEnergies forecourt)",
         address:"75 Route de Chinon, 37800 Noyant-de-Touraine, France",
         e10:"€1.990", diesel:"€2.250", extra:null,
@@ -463,14 +483,14 @@
         detour:"+2.4 km / +4 min — exit 25, toll plaza sits in Noyant-de-Touraine",
         buy:"Full tank · ~40.1 L · €79.87",
         tank:"Tank on arrival: 9.9 L of 50 (≈152 km). This is the leg that matters — 617.5 km against your 680 km line, 62 km of margin; it only breaks at 8.10 L/100 km.",
-        save:"57 c/L under the southbound Tours-La Longue Vue aire (€2.559) → ~€22.7 on 40 L, against ~€0.35 of detour fuel. The southbound/northbound price split is an inference, not a pump reading.",
+        save:"57 c/L under the motorway-aire E10 price recorded on this stretch (€2.559, official feed) → ~€22.7 on 40 L, against ~€0.35 of detour fuel. The southbound/northbound price split is an inference, not a pump reading.",
         fallback:null,
         checked:"Official feed maj 19 Oct 2026" },
       wazeSearch:"AD Garage Larose Noyant-de-Touraine" },
 
     { id:"stleger", type:"stop", km:929, name:"Aire de Saint-Léger Ouest",
       road:"A10, sens Bordeaux · ≈ PK 468 · Vinci/ASF",
-      lat:45.61118, lon:-0.60231, arrive:"16:30", arriveEnd:"16:45", dwell:"15 min",
+      lat:45.61118, lon:-0.60231, arrive:"16:26", arriveEnd:"16:41", dwell:"15 min",
       chips:["Fuel 24/7","2 fast food","Toilets ×3","EV ×1"],
       dog:"Short grass strip and a perimeter track (vineyard/woodland edge). Pee-and-sniff, not a hike.",
       dogRating:"Verge + track",
@@ -478,7 +498,7 @@
 
     { id:"ocean", type:"stop", km:1146, name:"Aire de l'Océan-Ouest",
       road:"A63 Autoroute des Landes, sens Bayonne/Espagne · Vinci/ASF",
-      lat:43.93696, lon:-1.09315, arrive:"18:50", arriveEnd:"19:15", dwell:"25 min",
+      lat:43.93696, lon:-1.09315, arrive:"18:46", arriveEnd:"19:11", dwell:"25 min",
       chips:["Fuel 24/7","Shop 24/7","Toilets ×3","EV ×3"],
       dog:"Landes pine forest on three sides — the best off-lead-ish sniffing of the day. Dusk (~19:00): take a headtorch or use phone light.",
       dogRating:"Pine forest",
@@ -486,7 +506,7 @@
 
     { id:"alcampo", type:"fuel", km:1250, name:"Alcampo Irun",
       road:"Parque Comercial Txingudi — ~2 km off the AP-8 at the Irun/Txingudi exit",
-      lat:43.32258, lon:-1.83472, arrive:"20:30", arriveEnd:"20:45", dwell:"full tank + break ~15 min",
+      lat:43.32258, lon:-1.83472, arrive:"20:26", arriveEnd:"20:41", dwell:"full tank + break ~15 min",
       chips:["E10 — full tank","Hypermarket","Cafés","Toilets","Large lit car park",{t:"Last stop · Pamplona 92 km",cls:"warn"}],
       dog:"Last dog break of the drive — retail-park edges with grass strips. Recommended as a 15-min dog stop.",
       dogRating:"Grass strips",
@@ -524,7 +544,8 @@
     copyFallback: document.getElementById("copy-fallback"),
     routeUrl: document.getElementById("route-url"),
     routeDrop: document.getElementById("route-drop"),
-    routeFit: document.getElementById("route-fit")
+    routeFit: document.getElementById("route-fit"),
+    routeAltLink: document.getElementById("route-alt-link")
   };
 
   function pad(n){ return (n<10?"0":"")+n; }
@@ -593,14 +614,23 @@
   }
 
   // No origin on purpose: the drive starts wherever the phone is on the day.
-  function routeURL(plan){
+  // `extra` is one optional trailing waypoint, used to force the N-121-A mountain line.
+  function routeURL(plan, extra){
+    var wps = plan.stops.map(coord);
+    if(extra) wps.push(coord(extra));
     return "https://www.google.com/maps/dir/?api=1&destination=" + coord(PAMPLONA)
-      + "&waypoints=" + plan.stops.map(coord).join("|")
+      + "&waypoints=" + wps.join("|")
       + "&travelmode=driving";
   }
 
+  // Doneztebe / Santesteban town centre, 4 m off the N-121-A centreline (OSRM nearest). Google
+  // routes AP-8/A-15 by default, so this single pin forces Behobia → Endarlatsa → Bera → Belate.
+  var MOUNTAIN_WP = { lat:43.17218, lon:-1.66974 };
+
   var ROUTE = routePlan();
   var ROUTE_URL = routeURL(ROUTE);
+  var ROUTE_URL_MOUNTAIN = (ROUTE.stops.length + 1 <= MAX_WAYPOINTS)
+    ? routeURL(ROUTE, MOUNTAIN_WP) : null;
 
   function chipHTML(c){
     if(typeof c === "string") return '<span class="chip">'+esc(c)+'</span>';
@@ -642,6 +672,10 @@
   (function initRoute(){
     if(el.routeLink) el.routeLink.href = ROUTE_URL;
     if(el.routeUrl) el.routeUrl.value = ROUTE_URL;
+    if(el.routeAltLink){
+      if(ROUTE_URL_MOUNTAIN){ el.routeAltLink.href = ROUTE_URL_MOUNTAIN; }
+      else { el.routeAltLink.parentNode.hidden = true; }
+    }
 
     if(el.routeDrop && ROUTE.dropped.length){
       el.routeDrop.hidden = false;
@@ -656,6 +690,8 @@
       if(ROUTE.dropped.length){
         el.routeFit.textContent += " — " + ROUTE.dropped.length + " of "
           + (ROUTE.stops.length + ROUTE.dropped.length) + " stops left out below";
+      } else if(spare === 1){
+        el.routeFit.textContent += " — the mountain-road variant below uses the ninth";
       }
     }
 
@@ -803,7 +839,7 @@
           + '<div class="km-badge"><div class="k">1 342</div><div class="l">km</div></div>'
           + '<div class="stop-title">'
             + '<div class="stop-name">Pamplona</div>'
-            + '<div class="stop-road">PA-30 — arrive ~21:45 (band 21:30–22:00) · 92 km from Alcampo Irun, no stop in between</div>'
+            + '<div class="stop-road">PA-30 — arrive ~'+ARRIVAL+' (band '+ARRIVAL_BAND+') on the motorway line · 92 km from Alcampo Irun, no stop in between · +~10 min via the N-121-A option</div>'
           + '</div>'
         + '</div>'
       + '</div>'
@@ -842,7 +878,7 @@
     if(nxt){
       el.nextText.innerHTML = "<b>" + esc(nxt.name) + "</b> · ETA ~" + esc(nxt.arrive) + " · km " + nxt.km
         + (isTrip && min < DEPART_MIN ? " · departs 04:30" : "");
-      el.etaLabel.textContent = "Next stop " + fmtKm(nxt.km) + " km · Pamplona ETA 21:45";
+      el.etaLabel.textContent = "Next stop " + fmtKm(nxt.km) + " km · Pamplona ETA " + ARRIVAL;
     } else {
       el.nextText.innerHTML = "<b>Arrived — Pamplona.</b> Drive safely, the dog thanks you.";
       el.etaLabel.textContent = "Pamplona reached · 1 342 km";
