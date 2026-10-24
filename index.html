@@ -46,6 +46,8 @@
     flex-wrap:wrap;gap:2px 10px;
     margin-top:8px;font-size:.88rem;color:var(--muted);}
   .progress-row b{color:var(--text);font-variant-numeric:tabular-nums;}
+  #eta-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    margin-top:6px;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums;}
   .bar{height:8px;background:var(--card2);border-radius:99px;margin-top:4px;overflow:hidden;}
   .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--done),var(--waze));
     border-radius:99px;transition:width .4s ease;width:0;}
@@ -205,9 +207,9 @@
     <div class="h-meta">Sun 25 Oct 2026 · <span class="h-clock" id="clock">--:--</span> · departed 04:30 (winter time) · E10 · 50 L</div>
     <div class="progress-row">
       <span id="km-label"><b>0</b> / 1 342 km</span>
-      <span id="eta-label">ETA Pamplona ~22:05</span>
     </div>
     <div class="bar"><i id="bar"></i></div>
+    <div class="eta-line" id="eta-label">Next stop 97.5 km · Pamplona ETA 22:05</div>
     <div class="next-summary" id="next-summary">
       <div class="lbl">Next stop</div>
       <div id="next-text">Loading…</div>
@@ -228,14 +230,14 @@
   <h2 class="sec" id="rng-h">Fuel &amp; range — 50 L, 6.5 L/100 km</h2>
   <section class="rng" aria-labelledby="rng-h">
     <div class="rr">
-      <span class="leg">Home, full tank → Maes Deurne<small>102 km</small></span>
-      <span class="res">burns 6.6 L · <b>43.4 L</b> left ≈ 667 km</span>
+      <span class="leg">Home, full tank → Gabriëls Deurne<small>97.5 km</small></span>
+      <span class="res">burns 6.3 L · <b>43.7 L</b> left ≈ 672 km</span>
       <span class="vf">fill 1</span>
     </div>
     <div class="rr">
-      <span class="leg">Maes → AD Larose<small>613 km · the long one</small></span>
-      <span class="res">burns 39.8 L · <b>10.2 L</b> left ≈ 156 km</span>
-      <span class="vf edge">67 km spare</span>
+      <span class="leg">Gabriëls → AD Larose<small>617.5 km · the long one</small></span>
+      <span class="res">burns 40.1 L · <b>9.9 L</b> left ≈ 152 km</span>
+      <span class="vf edge">62 km spare</span>
     </div>
     <div class="rr">
       <span class="leg">Larose → Alcampo Irun<small>535 km</small></span>
@@ -248,11 +250,11 @@
       <span class="vf">return leg</span>
     </div>
     <div class="cost">
-      <div class="cost-row"><span>Maes Deurne · 6.6 L × €1.849</span><b>€12.26</b></div>
-      <div class="cost-row"><span>AD Larose · 39.8 L × €1.990</span><b>€79.29</b></div>
+      <div class="cost-row"><span>Gabriëls Deurne · 6.3 L × €1.829</span><b>€11.59</b></div>
+      <div class="cost-row"><span>AD Larose · 40.1 L × €1.990</span><b>€79.87</b></div>
       <div class="cost-row"><span>Alcampo Irun · 34.8 L × €1.680</span><b>€58.42</b></div>
-      <div class="cost-row tot"><span>3 full fills · 81.3 L · avg €1.845/L</span><b>≈ €150</b></div>
-      <p class="disclaimer">Litres are derived, not measured: km × 6.5 L/100 km, each fill back to FULL, so you buy exactly what the leg burned. Your own figure is 6.0–7.0 L/100 km; at 7.0 the 613 km leg still arrives with 7.1 L (101 km), and it only breaks at 8.16 L/100 km. 680 km is your usable-range line — every leg is under it.</p>
+      <div class="cost-row tot"><span>3 full fills · 81.3 L · avg €1.845/L</span><b>≈ €149.9</b></div>
+      <p class="disclaimer">Litres are derived, not measured: km × 6.5 L/100 km, each fill back to FULL, so you buy exactly what the leg burned. Fuel 1 sits 4.5 km earlier than the old stop, so it buys 0.3 L less at the cheap pump and AD Larose buys 0.3 L more — the total barely moves. Your own figure is 6.0–7.0 L/100 km; at 7.0 the 617.5 km leg still arrives with 6.8 L (97 km), and it only breaks at 8.10 L/100 km. 680 km is your usable-range line — every leg is under it.</p>
     </div>
   </section>
 
@@ -260,6 +262,10 @@
 
   <h2 class="sec">Emergency / practical</h2>
   <div class="emergency">
+    <div class="em-item">
+      <div class="t"><span class="ic">⛽</span> Fill 1 is Gabriëls, not Maes</div>
+      <p>The first fill moved to <b>Gabriëls, Bisschoppenhoflaan 700/A</b> (km 97.5) — its 24u/24 card pump is documented, and it comes 4.5 km <em>earlier</em> than the old stop, so the sequence still runs Gabriëls → Wancourt → … At 05:42 there is no shop, no toilet and no attendant, and pre-auth runs to €375: bring a second card. <b>Maes Deurne</b> (Waterbaan 114, km 102) is dropped — same detour class, 2.0 c/L dearer, no verified 24/7 hours.</p>
+    </div>
     <div class="em-item">
       <div class="t"><span class="ic">💶</span> Tolls</div>
       <p>≈ €100 one way — France ≈ €95 (A1 + A10 + A63), Spain ≈ €3 (AP-8). Every barrier takes card; no télépéage badge needed.</p>
@@ -283,9 +289,9 @@
   </div>
 
   <footer>
-    <p><b>Time assumption:</b> depart 04:30 CET; drive legs at ~95 km/h free-flow average (OSRM-style, mildly pessimistic) plus the audited detour minutes (Maes +9.8, Larose +4, Zuasti back-door +2.9) and the dwell printed on each card. The extra fill is what moves the ETA from the old ~21:15 to ~22:05. Treat it as ±10 min.</p>
-    <p><b>Distance:</b> 1 342 km, one figure. The four planned legs used for the range arithmetic — 102 + 613 + 535 + 90 — sum to 1 340 km, so the headline and the legs agree to ±2 km. A corridor re-basing was not available in this run; treat the total as ±1 %.</p>
-    <p>Facts, coordinates and names are verbatim from the research artifacts. Prices: Maes Deurne and Alcampo Irun checked 21–22 Oct 2026, AD Larose from the official French feed (maj 19 Oct 2026). Coordinates are not rounded. Fuel prices are a snapshot — re-check the evening before departure.</p>
+    <p><b>Time assumption:</b> depart 04:30 CET; drive legs at ~95 km/h free-flow average (OSRM-style, mildly pessimistic) plus the audited detour minutes (Gabriëls +10.2, Larose +4, Zuasti back-door +2.9) and the dwell printed on each card. Fill 1 now comes 4.5 km (~2.8 min) earlier and costs 0.4 min more detour than Maes did: those roughly cancel, so the 3 spare minutes are taken as extra dwell at the first stop and every downstream ETA — including the ~22:05 arrival — is unchanged. The extra fill is what moves the ETA from the old ~21:15 to ~22:05. Treat it as ±10 min.</p>
+    <p><b>Distance:</b> 1 342 km, one figure. The four planned legs used for the range arithmetic — 97.5 + 617.5 + 535 + 90 — sum to 1 340 km, so the headline and the legs agree to ±2 km. A corridor re-basing was not available in this run; treat the total as ±1 %.</p>
+    <p>Facts, coordinates and names are verbatim from the research artifacts. Prices: Gabriëls Deurne checked 24 Oct 2026, Alcampo Irun 21 Oct 2026, AD Larose from the official French feed (maj 19 Oct 2026). Coordinates are not rounded. Fuel prices are a snapshot — re-check the evening before departure.</p>
     <div class="reset-row">
       <button class="reset" id="reset" type="button">Reset trip</button>
     </div>
@@ -302,28 +308,28 @@
   var DEPART_MIN = 270; // 04:30
 
   // Arrival anchors [minutes-from-midnight, km] for clock interpolation.
-  var ANCHORS = [[270,0],[345,102],[465,271],[615,479],[750,669],[830,715],[990,929],[1130,1146],[1230,1250],[1300,1329],[1325,1342]];
+  var ANCHORS = [[270,0],[342,97.5],[465,271],[615,479],[750,669],[830,715],[990,929],[1130,1146],[1230,1250],[1300,1329],[1325,1342]];
 
   var STOPS = [
-    { id:"maes", type:"fuel", km:102, name:"Maes Deurne",
-      road:"Waterbaan 114, 2100 Deurne, Antwerpen — ~5 km off the R1/E19 Antwerp ring",
-      lat:51.20526, lon:4.46296, arrive:"05:45", arriveEnd:"06:00", dwell:"full tank ~15 min",
-      chips:["E10 — full tank","Shop 08:00–22:00","Card at pump","Antwerp, BE"],
-      dog:"Urban forecourt on Waterbaan — no greenery verified here. Treat this as fuel only; the dog's proper leg-stretch is 169 km later at Wancourt Ouest.",
-      dogRating:"Not verified",
-      caution:"Pump access at 05:45 is UNVERIFIED: reported shop hours are 08:00–22:00 and the cards-at-pump path is documented only at brand level. If the pump is dark or refuses your card, do not hunt — Lukoil Deurne, Bisschoppenhoflaan 315 (51.23373, 4.46263), “kaartautomaat 24/24”, E10 €1.984 (17 Oct), is 0.5 km / +7 min from here.",
-      fuel:{ brand:"Maes — Deurne (Antwerpen)",
-        address:"Waterbaan 114, 2100 Antwerpen, Belgium",
-        e10:"€1.849", diesel:"€2.279", extra:null,
-        hours:"Shop 08:00–22:00 (reported) · card pump outside those hours unverified",
-        card:"Card at pump (Visa, Mastercard, Maestro, Bancontact), cash in the shop. Maes pre-auth ~€375 — carry a second card.",
-        detour:"+9.8 min vs staying on the R1 ring (measured)",
-        buy:"Full tank · ~6.6 L · €12.26",
-        tank:"Tank on arrival: 43.4 L of 50 (≈667 km left). You buy back the 6.6 L the 102 km burned.",
-        save:"14.1 c/L under Larose — worth ~€0.90 on this fill. You stop here for range, not for the saving.",
-        fallback:"Fallback, on the same ring: Lukoil Deurne, Bisschoppenhoflaan 315 — foreign-card acceptance at the Belgian automate is the same open question, so carry two.",
-        checked:"Prices checked 22 Oct 2026" },
-      wazeSearch:"Maes Waterbaan 114 Deurne" },
+    { id:"gabriels", type:"fuel", km:97.5, name:"Gabriëls Deurne",
+      road:"Bisschoppenhoflaan 700/A, 2100 Deurne, Antwerpen — off the R1 toward Merksem/Deurne, N130 over the Albert canal, then left onto Bisschoppenhoflaan (N120) and ~2 km east",
+      lat:51.23585, lon:4.48494, arrive:"05:42", arriveEnd:"06:00", dwell:"full tank ~18 min",
+      chips:["E10 — full tank","Unmanned, card at pump","24u/24 incl. holidays",{t:"No shop · no toilet",cls:"no"}],
+      dog:"Asphalt only — forecourt, canopy and carwash bays; the nearest mapped green is ~800 m away, so no leg-stretch here. The dog's proper stop is Wancourt Ouest, 174 km on.",
+      dogRating:"Asphalt only",
+      caution:"Unmanned: no shop, no toilet, no coffee at 05:42, and the card pre-auth runs to €375 — carry a second card. If the pump refuses, do not hunt: Lukoil Deurne, Bisschoppenhoflaan 315 (51.23373, 4.46263), E10 €1.984, card 24/24, is 2.0 km back west (+2.4 min) and is the last station on the approach, so you have already passed it.",
+      fuel:{ brand:"Gabriëls — Deurne (Antwerpen)",
+        address:"Bisschoppenhoflaan 700/A, 2100 Deurne, Antwerpen, Belgium",
+        e10:"€1.829", diesel:"€2.261", extra:null,
+        hours:"24u/24, public holidays included (station listing) · unmanned — card at pump only",
+        card:"Card at pump (Bancontact, Maestro, VPay, Visa, Mastercard, Amex + fleet cards); two terminals, either starts any pump. Pre-auth up to €375 — carry a second card.",
+        detour:"+6.0 km / +10.2 min vs staying on the R1 ring (measured) · via the N130 → Bisschoppenhoflaan N120 exit",
+        buy:"Full tank · ~6.3 L · €11.59",
+        tank:"Tank on arrival: 43.7 L of 50 (≈672 km left). You buy back the 6.3 L the 97.5 km burned.",
+        save:"17.3 c/L under the federal E10 ceiling (€2.0020 from 22 Oct) — worth ~€1.10 on this fill. You stop here for range and a documented 24/7 pump, not for the saving.",
+        fallback:"Fallback: Lukoil Deurne, Bisschoppenhoflaan 315 (51.23373, 4.46263), E10 €1.984, card 24/24 — 2.0 km back west, +2.4 min, ~€1.02 more on this fill.",
+        checked:"Prices checked 24 Oct 2026" },
+      wazeSearch:"Gabriëls Bisschoppenhoflaan 700A Deurne" },
 
     { id:"wancourt", type:"stop", km:271, name:"Aire de Wancourt Ouest",
       road:"A1 Autoroute du Nord, sens Paris (southbound) · ≈ PK 170 · SANEF · footbridge to the Est side",
@@ -362,8 +368,8 @@
         hours:"Card automate 24/24, 7/7 · shop closed every day — Sunday is no different",
         card:"Automate CB 24/24 (Visa/Mastercard/CB, chip + PIN). ATM on site. Foreign-card acceptance unverified.",
         detour:"+2.4 km / +4 min — exit 25, toll plaza sits in Noyant-de-Touraine",
-        buy:"Full tank · ~39.8 L · €79.29",
-        tank:"Tank on arrival: 10.2 L of 50 (≈156 km). This is the leg that matters — 613 km against your 680 km line, 67 km of margin; it only breaks at 8.16 L/100 km.",
+        buy:"Full tank · ~40.1 L · €79.87",
+        tank:"Tank on arrival: 9.9 L of 50 (≈152 km). This is the leg that matters — 617.5 km against your 680 km line, 62 km of margin; it only breaks at 8.10 L/100 km.",
         save:"57 c/L under the southbound Tours-La Longue Vue aire (€2.559) → ~€22.7 on 40 L, against ~€0.35 of detour fuel. The southbound/northbound price split is an inference, not a pump reading.",
         fallback:null,
         checked:"Official feed maj 19 Oct 2026" },
@@ -609,10 +615,10 @@
     if(nxt){
       el.nextText.innerHTML = "<b>" + esc(nxt.name) + "</b> · ETA ~" + esc(nxt.arrive) + " · km " + nxt.km
         + (isTrip && min < DEPART_MIN ? " · departs 04:30" : "");
-      el.etaLabel.textContent = "Next stop km " + nxt.km + " · ETA 22:05";
+      el.etaLabel.textContent = "Next stop " + fmtKm(nxt.km) + " km · Pamplona ETA 22:05";
     } else {
       el.nextText.innerHTML = "<b>Arrived — Pamplona.</b> Drive safely, the dog thanks you.";
-      el.etaLabel.textContent = "1 342 / 1 342 km";
+      el.etaLabel.textContent = "Pamplona reached · 1 342 km";
     }
 
     renderTimeline(clockCurrent, nxt ? nxt.id : null);
