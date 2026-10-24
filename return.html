@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="description" content="Way back · Pamplona → Rotterdam — build the return drive yourself: add stops by link or name, see range and ETA live, autosaved to this phone.">
+<title>Way back · Pamplona → Rotterdam</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20128%20128%27%3E%3Crect%20width=%27128%27%20height=%27128%27%20rx=%2724%27%20fill=%27%230d1117%27/%3E%3Cpath%20d=%27M24%2092%20C40%2020%2060%20108%2088%2030%27%20stroke=%27%2333ccff%27%20stroke-width=%2710%27%20fill=%27none%27%20stroke-linecap=%27round%27/%3E%3Ccircle%20cx=%2724%27%20cy=%2792%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3Ccircle%20cx=%2788%27%20cy=%2730%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+
+<style>
+  :root{
+    --bg:#0d1117; --card:#161b22; --card2:#1c232d; --border:#30363d;
+    --text:#e6edf3; --muted:#9198a1;
+    --accent:#58a6ff; --waze:#33ccff; --done:#3fb950; --warn:#d29922; --danger:#f85149;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%;}
+  body{min-width:320px;}
+  a{color:var(--accent);}
+  .wrap{max-width:760px;margin:0 auto;padding:0 12px 40px;}
+  button{font:inherit;color:inherit;}
+  input,select{font:inherit;color:var(--text);}
+  input[type="date"],input[type="time"],input[type="number"],input[type="text"]{color-scheme:dark;}
+
+  /* ---------- Sticky header ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(13,17,23,.94);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);padding:10px 12px 14px;}
+  .h-top{display:flex;align-items:flex-start;gap:10px;}
+  .h-title{font-size:1.22rem;font-weight:700;line-height:1.2;background:transparent;border:1px solid transparent;
+    color:var(--text);width:100%;min-height:40px;padding:2px 6px;border-radius:8px;}
+  .h-title:hover,.h-title:focus{border-color:var(--border);}
+  .crosslink{flex:0 0 auto;font-size:.8rem;font-weight:700;text-decoration:none;color:var(--muted);
+    border:1px solid var(--border);border-radius:99px;padding:5px 11px;white-space:nowrap;min-height:36px;display:flex;align-items:center;}
+  .h-meta{color:var(--muted);font-size:.88rem;margin-top:4px;line-height:1.4;}
+  .h-stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .stat{flex:1 1 82px;min-width:82px;background:var(--card2);border:1px solid var(--border);
+    border-radius:10px;padding:7px 9px;text-align:center;}
+  .stat .v{font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text);}
+  .stat .l{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .stat.eta .v{color:var(--waze);}
+
+  /* ---------- Sections ---------- */
+  h2.sec{margin:26px 0 10px;font-size:1.02rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  .lede{color:var(--muted);font-size:.92rem;margin:6px 0 16px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin:0 0 14px;}
+
+  /* ---------- Forms ---------- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid .full{grid-column:1 / -1;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field.span2{grid-column:1 / -1;}
+  .field label{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .field input,.field select{min-height:48px;padding:8px 10px;border-radius:9px;background:var(--bg);
+    border:1px solid var(--border);color:var(--text);font-size:1rem;width:100%;}
+  .field .hint{font-size:.74rem;color:var(--muted);line-height:1.3;}
+  .inline-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+  /* ---------- Add stop ---------- */
+  .addbox{display:flex;gap:8px;align-items:stretch;}
+  .addbox input{flex:1 1 auto;min-height:52px;padding:8px 12px;border-radius:12px;background:var(--bg);
+    border:1px solid var(--border);font-size:1rem;width:100%;min-width:0;}
+  .addbox .btn-add{flex:0 0 auto;min-height:52px;padding:0 18px;border-radius:12px;background:var(--accent);
+    color:#04121f;font-weight:800;border:1px solid transparent;font-size:1rem;}
+  .confirm{margin-top:10px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;}
+  .confirm .cf-note{font-size:.84rem;color:var(--muted);margin:0 0 8px;}
+  .confirm .cf-note b{color:var(--text);}
+  .confirm-actions{display:flex;gap:8px;margin-top:10px;}
+  .btn{min-height:48px;padding:0 14px;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;
+    border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:6px;}
+  .btn.primary{background:var(--done);color:#04121f;flex:1 1 auto;}
+  .btn.ghost{background:var(--card2);border-color:var(--border);color:var(--muted);flex:0 0 auto;}
+  .btn.warn-t{background:transparent;border-color:var(--danger);color:var(--danger);}
+  .btn.danger{background:var(--danger);color:#fff;}
+  .btn.alt{background:var(--card2);border-color:var(--border);color:var(--text);}
+
+  /* ---------- Stop cards ---------- */
+  .stop{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin:0 0 12px;overflow:hidden;}
+  .stop.example{opacity:.82;border-style:dashed;}
+  .stop-head{display:flex;align-items:flex-start;gap:10px;padding:12px 12px 6px;}
+  .km-badge{flex:0 0 auto;min-width:70px;text-align:center;padding:6px 8px;background:var(--card2);
+    border-radius:10px;border:1px solid var(--border);}
+  .km-badge .k{font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .km-badge .l{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .stop-body{flex:1 1 auto;min-width:0;}
+  .stop-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .stop-name-row input{flex:1 1 100%;min-width:0;min-height:44px;background:transparent;border:1px solid transparent;
+    border-radius:8px;padding:4px 6px;font-size:1.08rem;font-weight:700;color:var(--text);width:100%;}
+  .stop-name-row input:hover,.stop-name-row input:focus{border-color:var(--border);background:var(--card2);}
+  .stop-kind{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    padding:2px 8px;border-radius:99px;}
+  .stop-kind.fuel{background:rgba(211,153,34,.16);color:var(--warn);}
+  .stop-kind.lunch{background:rgba(63,185,80,.18);color:var(--done);}
+  .stop-kind.stretch{background:rgba(88,166,255,.16);color:var(--accent);}
+  .stop-kind.overnight{background:rgba(248,81,73,.16);color:var(--danger);}
+  .stop-kind.start{background:rgba(63,185,80,.18);color:var(--done);}
+  .stop-kind.dest{background:rgba(63,185,80,.18);color:var(--done);}
+  .ex-badge{display:inline-block;font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+    color:#04121f;background:var(--warn);border-radius:99px;padding:2px 8px;}
+  .stop-time{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center;}
+  .time-pill{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;
+    font-size:.9rem;font-variant-numeric:tabular-nums;}
+  .time-pill .l{color:var(--muted);font-size:.76rem;}
+  .stop-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 12px 10px;}
+  .stop-fields .field input,.stop-fields .field select{min-height:44px;font-size:.95rem;}
+  .field .est{font-size:.72rem;color:var(--warn);font-weight:600;}
+  details.coords{padding:0 12px 8px;}
+  details.coords summary{cursor:pointer;color:var(--muted);font-size:.8rem;min-height:40px;display:flex;align-items:center;}
+  details.coords .grid{padding-top:6px;}
+  .dog-row{padding:6px 12px 10px;}
+  .dog-row input{width:100%;min-height:44px;background:var(--bg);border:1px solid var(--border);border-radius:8px;
+    padding:6px 10px;font-size:.9rem;}
+  .stop-actions{display:flex;gap:6px;padding:10px 12px 12px;flex-wrap:wrap;border-top:1px solid var(--border);}
+  .sbtn{flex:1 1 auto;min-height:44px;padding:0 10px;border-radius:9px;font-size:.86rem;font-weight:700;
+    cursor:pointer;border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;}
+  .sbtn.waze{background:var(--waze);color:#04121f;}
+  .sbtn.maps{background:var(--card2);border-color:var(--border);color:var(--text);}
+  .sbtn.mini{flex:0 0 auto;width:44px;padding:0;background:var(--card2);border-color:var(--border);color:var(--muted);}
+  .sbtn.mini:disabled{opacity:.35;cursor:default;}
+  .sbtn.del{flex:0 0 auto;width:44px;padding:0;background:transparent;border-color:rgba(248,81,73,.4);color:var(--danger);}
+
+  /* ---------- Route / share ---------- */
+  .route-go{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin:14px 0 4px;}
+  .route-go-h{margin:0 0 8px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  .btn-route{display:flex;align-items:center;justify-content:center;text-align:center;min-height:56px;width:100%;
+    padding:10px 14px;border-radius:12px;text-decoration:none;background:var(--done);color:#04121f;
+    font-size:1rem;font-weight:800;line-height:1.25;border:1px solid transparent;}
+  .btn-route[disabled]{opacity:.5;}
+  .route-note{margin:8px 0 0;font-size:.8rem;line-height:1.4;color:var(--muted);}
+  .route-note b{color:var(--text);}
+  .route-drop{margin:8px 0 0;font-size:.8rem;line-height:1.4;border-radius:9px;padding:7px 10px;
+    background:rgba(211,153,34,.12);border:1px solid rgba(211,153,34,.35);color:#e8c07a;}
+  .route-drop[hidden]{display:none;}
+  .ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+  .copy-fallback{margin-top:10px;}
+  .copy-fallback[hidden]{display:none;}
+  .copy-field{width:100%;max-width:100%;min-height:48px;padding:8px 10px;border-radius:9px;background:var(--bg);
+    border:1px solid var(--border);color:var(--text);font-size:.8rem;line-height:1.35;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .copied{background:rgba(63,185,80,.16)!important;border-color:rgba(63,185,80,.5)!important;color:var(--done)!important;}
+
+  /* ---------- Range block ---------- */
+  .rng{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .rr{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:.88rem;}
+  .rr .leg{flex:1 1 130px;min-width:0;font-weight:600;line-height:1.25;}
+  .rr .leg small{display:block;color:var(--muted);font-weight:400;font-size:.76rem;}
+  .rr .res{flex:1 1 120px;min-width:0;text-align:right;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .rr .res b{color:var(--text);}
+  .rr.warnrow{background:rgba(248,81,73,.08);}
+  .rr.warnrow .res b{color:var(--danger);}
+  .cost{padding:10px 12px 12px;font-size:.82rem;color:var(--muted);}
+  .cost .disclaimer{font-size:.76rem;margin-top:6px;}
+
+  /* ---------- Toast ---------- */
+  #toast{position:fixed;left:12px;right:12px;bottom:14px;max-width:560px;margin:0 auto;z-index:100;
+    background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;
+    font-size:.9rem;box-shadow:0 8px 30px rgba(0,0,0,.5);display:flex;align-items:center;gap:10px;justify-content:space-between;
+    transform:translateY(140%);transition:transform .25s ease;}
+  #toast.show{transform:translateY(0);}
+  #toast .undo{min-height:40px;padding:0 12px;border-radius:8px;background:var(--accent);color:#04121f;
+    font-weight:700;border:1px solid transparent;cursor:pointer;flex:0 0 auto;}
+
+  footer{margin-top:26px;color:var(--muted);font-size:.82rem;line-height:1.5;}
+  footer p{margin:6px 0;}
+  @media(min-width:480px){ .grid{grid-template-columns:repeat(4,1fr);} .field.span2{grid-column:span 2;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap" style="padding:0;">
+    <div class="h-top">
+      <input class="h-title" id="h-title" data-setting="title" type="text" aria-label="Trip name" autocomplete="off" spellcheck="false">
+      <a class="crosslink" href="index.html" rel="noopener">← outbound</a>
+    </div>
+    <div class="h-meta" id="h-meta">—</div>
+    <div class="h-stats" id="stats" role="group" aria-label="Trip summary"></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2 class="sec">Trip &amp; car</h2>
+  <section class="card" aria-label="Trip settings">
+    <div class="grid">
+      <div class="field span2">
+        <label for="f-date">Date · departure</label>
+        <div class="inline-3">
+          <input id="f-date" data-setting="date" type="date">
+          <input id="f-time" data-setting="time" type="time">
+          <select id="f-fuel" data-setting="fuel" aria-label="Fuel type">
+            <option value="E10">E10</option>
+            <option value="E5">E5</option>
+            <option value="Diesel">Diesel</option>
+          </select>
+        </div>
+        <span class="hint">Default Sun 1 Nov 2026, 09:00. Everything below recomputes from these.</span>
+      </div>
+      <div class="field">
+        <label for="f-tank">Tank (L)</label>
+        <input id="f-tank" data-setting="tank" type="number" min="10" max="200" step="1" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="f-cons">Burn (L/100 km)</label>
+        <input id="f-cons" data-setting="cons" type="number" min="1" max="30" step="0.1" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="f-rlo">Usable range low (km)</label>
+        <input id="f-rlo" data-setting="rangeLo" type="number" min="100" max="2000" step="10" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="f-rhi">Usable range high (km)</label>
+        <input id="f-rhi" data-setting="rangeHi" type="number" min="100" max="2000" step="10" inputmode="decimal">
+        <span class="hint">Warns when a leg runs longer than this.</span>
+      </div>
+      <div class="field">
+        <label for="f-speed">Avg speed (km/h)</label>
+        <input id="f-speed" data-setting="speed" type="number" min="30" max="140" step="5" inputmode="decimal">
+        <span class="hint">For driving-time estimates only.</span>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sec">Add a stop</h2>
+  <section class="card" aria-label="Add a stop">
+    <div class="addbox">
+      <input id="add-input" type="text" placeholder="Paste a Maps/Waze link, or lat, lon, or a name" autocomplete="off" spellcheck="false" enterkeyhint="go">
+      <button class="btn-add" id="add-btn" type="button">Add</button>
+    </div>
+    <p class="lede" style="margin:8px 0 0;">Accepts a Google Maps link (<code>@lat,lon</code>, <code>?q=lat,lon</code>, <code>/dir/</code>), a Waze <code>ul?ll=</code> link, bare <code>lat, lon</code>, or just a name (then the Waze/Maps buttons search for it).</p>
+    <div class="confirm" id="add-confirm" hidden>
+      <p class="cf-note" id="cf-note"></p>
+      <div class="grid">
+        <div class="field span2">
+          <label for="cf-name">Name</label>
+          <input id="cf-name" type="text" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="cf-lat">Latitude</label>
+          <input id="cf-lat" type="number" step="0.00001" inputmode="decimal" placeholder="e.g. 47.66448">
+        </div>
+        <div class="field">
+          <label for="cf-lon">Longitude</label>
+          <input id="cf-lon" type="number" step="0.00001" inputmode="decimal" placeholder="e.g. 1.38590">
+        </div>
+      </div>
+      <div class="confirm-actions">
+        <button class="btn primary" id="cf-add" type="button">Add stop</button>
+        <button class="btn ghost" id="cf-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sec">Stops</h2>
+  <section class="card" aria-label="Stops">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+      <span class="lede" style="margin:0;" id="stops-note">Reorder with the arrows; first row is the start, last row is the destination.</span>
+      <button class="btn alt" id="seed" type="button">Start from outbound, reversed</button>
+    </div>
+    <div id="stops" role="list"></div>
+  </section>
+
+  <h2 class="sec">Fuel &amp; range</h2>
+  <section class="rng" id="range" aria-live="polite"></section>
+
+  <h2 class="sec">Route &amp; share</h2>
+  <section class="route-go" aria-labelledby="route-go-h">
+    <h3 class="route-go-h" id="route-go-h">Full route in one tap</h3>
+    <a class="btn-route" id="route-link" href="#" rel="noopener">Open full route in Google Maps</a>
+    <p class="route-note" id="route-note">Google Maps takes at most 9 waypoints between start and finish — the link keeps the first and last stops and every fuel stop, and names anything it had to leave out.</p>
+    <p class="route-drop" id="route-drop" hidden></p>
+    <div class="ctrl-grid">
+      <button class="btn alt" id="share-copy" type="button">Copy share link</button>
+      <button class="btn alt" id="wa-copy" type="button">Copy WhatsApp list</button>
+      <button class="btn alt" id="export" type="button">Export JSON</button>
+      <label class="btn alt" for="import-file" style="cursor:pointer;">Import JSON…</label>
+      <input id="import-file" type="file" accept=".json,application/json" style="display:none;">
+    </div>
+    <div class="copy-fallback" id="share-fallback" hidden>
+      <label for="share-url">Clipboard blocked — copy this by hand:</label>
+      <input class="copy-field" id="share-url" type="text" readonly inputmode="none" aria-label="Share link">
+    </div>
+    <details class="coords" style="padding:8px 0 0;">
+      <summary>Paste JSON to import</summary>
+      <textarea class="copy-field" id="import-paste" rows="5" placeholder='{"title":"…","stops":[…]}' style="width:100%;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn alt" id="import-load" type="button" style="flex:1 1 auto;">Load pasted JSON</button>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <p><b>Estimates only.</b> Straight-line km, 90 km/h average and your own L/100 km are planning numbers, not measurements. Distances between stops are crow-flies unless you overwrite the km field — real roads run longer.</p>
+    <p>Everything autosaves to this phone and survives a lock or reload. The share link encodes the whole plan in the URL, so your co-driver opens the same page. No data leaves the phone.</p>
+    <div style="display:flex;justify-content:flex-end;">
+      <button class="btn warn-t" id="clear" type="button">Clear all</button>
+    </div>
+  </footer>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = "pamplona-return-v1";
+  var HASH_PREFIX = "#s=";
+  var MAX_WAYPOINTS = 9;
+
+  var EXAMPLE_STOPS = [
+    { id:"ex0", name:"Pamplona — start (example)", lat:42.81253, lon:-1.64577, km:0, kmEst:false, dwell:0, type:"start", dog:"", example:true },
+    { id:"ex1", name:"Aire de Bordeaux — stretch (example)", lat:44.83, lon:-0.61, km:240, kmEst:true, dwell:15, type:"stretch", dog:"", example:true },
+    { id:"ex2", name:"Aire de Poitiers — fuel (example)", lat:46.58, lon:0.34, km:480, kmEst:true, dwell:10, type:"fuel", dog:"", example:true },
+    { id:"ex3", name:"Rotterdam — home (example)", lat:null, lon:null, km:1342, kmEst:true, dwell:0, type:"dest", dog:"", example:true }
+  ];
+
+  // Frozen outbound facts, reversed. km = 1342 − outbound km (same corridor, read backwards).
+  // Rotterdam has no pinned coordinate in the outbound plan, so it links out by search — honest, not invented.
+  var OUTBOUND_SEED = [
+    { name:"Pamplona — start", lat:42.81253, lon:-1.64577, km:0, kmEst:false, dwell:0, type:"start" },
+    { name:"Alcampo Irun", lat:43.32258, lon:-1.83472, km:92, kmEst:false, dwell:15, type:"fuel" },
+    { name:"Aire de l'Océan-Ouest", lat:43.93696, lon:-1.09315, km:196, kmEst:false, dwell:25, type:"stretch" },
+    { name:"Aire de Saint-Léger Ouest", lat:45.61118, lon:-0.60231, km:413, kmEst:false, dwell:15, type:"stretch" },
+    { name:"AD Garage Larose", lat:47.10870, lon:0.58316, km:627, kmEst:false, dwell:10, type:"fuel" },
+    { name:"Aire de Blois-Villerbon", lat:47.66448, lon:1.38590, km:725, kmEst:false, dwell:45, type:"lunch" },
+    { name:"Aire de Limours-Janvry", lat:48.63609, lon:2.14652, km:863, kmEst:false, dwell:20, type:"stretch" },
+    { name:"Aire de Wancourt Ouest", lat:50.26222, lon:2.86299, km:1071, kmEst:false, dwell:15, type:"stretch" },
+    { name:"Gabriëls Deurne", lat:51.23585, lon:4.48494, km:1244.5, kmEst:false, dwell:18, type:"fuel" },
+    { name:"Rotterdam — home", lat:null, lon:null, km:1342, kmEst:false, dwell:0, type:"dest" }
+  ];
+
+  var DEFAULTS = {
+    v:1, title:"Way back · Pamplona → Rotterdam", date:"2026-11-01", time:"09:00",
+    fuel:"E10", tank:50, cons:6.5, rangeLo:650, rangeHi:680, speed:90
+  };
+  var TYPES = ["fuel","lunch","stretch","overnight"];
+  var TYPE_LABELS = { fuel:"Fuel", lunch:"Lunch", stretch:"Stretch", overnight:"Overnight", start:"Start", dest:"Destination" };
+
+  // ---------- helpers ----------
+  function pad(n){ return (n<10?"0":"")+n; }
+  function fmt(m){ m = Math.round(m); return pad(Math.floor(m/60)%24) + ":" + pad(m%60); }
+  function fmtDur(min){
+    if(min==null || !isFinite(min)) return "—";
+    var h = Math.floor(min/60), m = Math.round(min%60);
+    if(m===60){ h++; m=0; }
+    if(h===0) return m + " min";
+    return h + " h" + (m ? " " + m + " min" : "");
+  }
+  function toMin(hhmm){ var p = (hhmm||"09:00").split(":"); return (+p[0])*60 + (+p[1]); }
+  function round1(n){ return Math.round(n*10)/10; }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function coord(s){
+    if(s.lat==null || s.lon==null) return null;
+    return Number(s.lat).toFixed(5) + "," + Number(s.lon).toFixed(5);
+  }
+  function fmtKm(k){ return k==null ? "—" : (k >= 1000 ? k.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") : String(k)); }
+  function haversineKm(aLat,aLon,bLat,bLon){
+    var R=6371, dLat=(bLat-aLat)*Math.PI/180, dLon=(bLon-aLon)*Math.PI/180;
+    var s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(aLat*Math.PI/180)*Math.cos(bLat*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+    return R*2*Math.atan2(Math.sqrt(s), Math.sqrt(1-s));
+  }
+  function genId(){ return "s" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function wazeUrl(s){
+    if(s.lat!=null && s.lon!=null) return "https://waze.com/ul?ll="+Number(s.lat).toFixed(5)+","+Number(s.lon).toFixed(5)+"&navigate=yes";
+    return "https://waze.com/ul?q=" + encodeURIComponent(s.name) + "&navigate=yes";
+  }
+  function mapsUrl(s){
+    if(s.lat!=null && s.lon!=null) return "https://maps.google.com/?q="+Number(s.lat).toFixed(5)+","+Number(s.lon).toFixed(5);
+    return "https://maps.google.com/?q=" + encodeURIComponent(s.name);
+  }
+
+  // ---------- state ----------
+  function num(v, def){ var n = parseFloat(v); return isFinite(n) ? n : def; }
+  function sanitizeStop(s){
+    if(!s || typeof s!=="object") return null;
+    return {
+      id: typeof s.id==="string" && s.id ? s.id : genId(),
+      name: typeof s.name==="string" && s.name ? s.name : "Stop",
+      lat: s.lat!=null && isFinite(parseFloat(s.lat)) ? parseFloat(s.lat) : null,
+      lon: s.lon!=null && isFinite(parseFloat(s.lon)) ? parseFloat(s.lon) : null,
+      km: s.km!=null && isFinite(parseFloat(s.km)) ? parseFloat(s.km) : null,
+      kmEst: !!s.kmEst,
+      dwell: num(s.dwell, 0),
+      type: TYPES.indexOf(s.type)>=0 ? s.type : "stretch",
+      dog: typeof s.dog==="string" ? s.dog : "",
+      example: !!s.example
+    };
+  }
+  function sanitize(s){
+    var d = JSON.parse(JSON.stringify(DEFAULTS));
+    if(!s || typeof s!=="object") return d;
+    if(typeof s.title==="string" && s.title) d.title = s.title;
+    if(typeof s.date==="string" && s.date) d.date = s.date;
+    if(typeof s.time==="string" && s.time) d.time = s.time;
+    if(typeof s.fuel==="string" && s.fuel) d.fuel = s.fuel;
+    d.tank = num(s.tank, 50); d.cons = num(s.cons, 6.5);
+    d.rangeLo = num(s.rangeLo, 650); d.rangeHi = num(s.rangeHi, 680); d.speed = num(s.speed, 90);
+    d.stops = Array.isArray(s.stops) ? s.stops.map(sanitizeStop).filter(Boolean) : [];
+    return d;
+  }
+  function encodeState(s){
+    var bytes = encodeURIComponent(JSON.stringify(s)).replace(/%([0-9A-F]{2})/g, function(m,p){ return String.fromCharCode(parseInt(p,16)); });
+    return btoa(bytes).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }
+  function decodeState(h){
+    var b = h.replace(/-/g,"+").replace(/_/g,"/");
+    while(b.length%4) b += "=";
+    var bin = atob(b);
+    var pct = bin.replace(/[\s\S]/g, function(c){ return "%" + ("00"+c.charCodeAt(0).toString(16)).slice(-2); });
+    return JSON.parse(decodeURIComponent(pct));
+  }
+  function load(){
+    var h = location.hash;
+    if(h && h.indexOf(HASH_PREFIX)===0){
+      try { return sanitize(decodeState(h.slice(HASH_PREFIX.length))); } catch(e){}
+    }
+    try {
+      var v = localStorage.getItem(KEY);
+      if(v) return sanitize(JSON.parse(v));
+    } catch(e){}
+    var d = JSON.parse(JSON.stringify(DEFAULTS));
+    d.stops = JSON.parse(JSON.stringify(EXAMPLE_STOPS));
+    return d;
+  }
+
+  var state = load();
+  var stops = state.stops;
+  var saveTimer = null;
+  function save(debounced){
+    if(debounced){
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, 250);
+      return;
+    }
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+    try { history.replaceState(null, "", HASH_PREFIX + encodeState(state)); } catch(e){}
+  }
+
+  // ---------- parsing ----------
+  function guessNameFromUrl(url){
+    var m = /\/place\/([^/@?&]+)/.exec(url) || /\/search\/([^/@?&]+)/.exec(url) || /maps\/(?:search|dir)\/([^/@?&]+)/.exec(url);
+    if(!m) return null;
+    var s = m[1].replace(/\+/g," ").replace(/%20/g," ").trim();
+    s = s.replace(/^-?\d+(\.\d+)?,-?\d+(\.\d+)?/, "").trim();
+    if(!s) return null;
+    return decodeURIComponent ? decodeURIComponent(s) : s;
+  }
+  function parseInput(text){
+    text = (text||"").trim();
+    if(!text) return { ok:false, error:"empty", raw:"" };
+    var lat=null, lon=null, nameGuess="", source="";
+    var coordRe = /(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/g;
+    var pairs = [];
+    var m;
+    while((m=coordRe.exec(text))){ pairs.push([parseFloat(m[1]), parseFloat(m[2])]); }
+    var isUrl = /^(https?:\/\/|www\.)/i.test(text) || text.indexOf("waze.com")>-1
+      || text.indexOf("google.")>-1 || text.indexOf("goo.gl")>-1 || text.indexOf("maps/")>-1;
+
+    if(isUrl){
+      var at = /@(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)/.exec(text);
+      if(at){ lat=parseFloat(at[1]); lon=parseFloat(at[2]); source="Google Maps place (@lat,lon)"; }
+      else {
+        var p = /(?:ll|q|query|destination)=(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)/i.exec(text);
+        if(p){
+          lat=parseFloat(p[1]); lon=parseFloat(p[2]);
+          source = (/ll=/.test(text) ? "Waze link (ul?ll=)" : "Google Maps link (?q=/destination=)");
+        } else if(pairs.length){
+          lat=pairs[0][0]; lon=pairs[0][1]; source="Google Maps /dir/ link";
+        }
+      }
+      nameGuess = guessNameFromUrl(text) || (lat!=null ? "Pin "+lat.toFixed(5)+", "+lon.toFixed(5) : text);
+    } else if(pairs.length===1 && /^-?\d{1,3}(?:\.\d+)?\s*,\s*-?\d{1,3}(?:\.\d+)?$/.test(text)){
+      lat=pairs[0][0]; lon=pairs[0][1]; source="bare lat, lon";
+      nameGuess = "Pin "+lat.toFixed(5)+", "+lon.toFixed(5);
+    } else {
+      source="name only — links out by search"; nameGuess=text;
+    }
+
+    if(lat!=null && (lat<-90||lat>90)) return { ok:false, error:"latitude "+lat+" out of range", raw:text, name:text };
+    if(lon!=null && (lon<-180||lon>180)) return { ok:false, error:"longitude "+lon+" out of range", raw:text, name:text };
+    return { ok:true, name:nameGuess, lat:lat, lon:lon, source:source, raw:text };
+  }
+
+  // ---------- computed ----------
+  function computeTimes(){
+    var depart = toMin(state.time);
+    var arr = [];
+    var cumDrive = 0, cumDwell = 0;
+    for(var i=0;i<stops.length;i++){
+      if(i>0){
+        var a = stops[i-1].km, b = stops[i].km;
+        if(a!=null && b!=null && b>=a) cumDrive += (b-a)/state.speed*60;
+        cumDwell += (stops[i-1].dwell||0);
+      }
+      arr.push(fmt(depart + cumDrive + cumDwell));
+    }
+    return arr;
+  }
+  function totals(){
+    var t = { km:null, drive:null, dwell:0, stops:0, eta:null };
+    if(stops.length){
+      var last = stops[stops.length-1];
+      if(last.km!=null) t.km = last.km;
+      for(var i=1;i<stops.length-1;i++){ t.dwell += (stops[i].dwell||0); }
+      t.stops = Math.max(0, stops.length-2);
+      if(t.km!=null) t.drive = t.km/state.speed*60;
+      var times = computeTimes();
+      t.eta = times[times.length-1];
+    }
+    return t;
+  }
+  function fuelLegs(){
+    var legs = [];
+    if(stops.length<2) return legs;
+    var segStart = 0, segKm = 0;
+    for(var i=0;i<stops.length;i++){
+      if(i>0){
+        var a = stops[i-1].km, b = stops[i].km;
+        if(a!=null && b!=null) segKm += Math.max(0, b-a);
+      }
+      var isFuel = stops[i].type==="fuel" && i!==0 && i!==stops.length-1;
+      var isLast = i===stops.length-1;
+      if(isFuel || isLast){
+        legs.push({ from: stops[segStart].name, to: stops[i].name, km: round1(segKm) });
+        segStart = i; segKm = 0;
+      }
+    }
+    return legs;
+  }
+  function mapsPlan(){
+    var withCoord = [], skippedNoCoord = 0;
+    stops.forEach(function(s){
+      if(s.lat!=null && s.lon!=null) withCoord.push(s);
+      else skippedNoCoord++;
+    });
+    var plan = { url:null, dropped:[], skipped:skippedNoCoord, used:0 };
+    if(withCoord.length<2) return plan;
+    var origin = withCoord[0], dest = withCoord[withCoord.length-1];
+    var mid = withCoord.slice(1, withCoord.length-1).map(function(s,i){ return {s:s, i:i}; });
+    var dropped = [];
+    if(mid.length > MAX_WAYPOINTS){
+      var keep = mid.filter(function(x){ return x.s.type==="fuel"; });
+      var cand = mid.filter(function(x){ return x.s.type!=="fuel"; });
+      var need = mid.length - MAX_WAYPOINTS;
+      var n = cand.length;
+      cand.sort(function(a,b){ return Math.abs(a.i-(n-1)/2) - Math.abs(b.i-(n-1)/2); });
+      for(var k=0; k<cand.length && dropped.length<need; k++){ dropped.push(cand[k].s); }
+      if(dropped.length < need){
+        var fuelLeft = keep.filter(function(x){ return dropped.indexOf(x.s)===-1; });
+        var nf = fuelLeft.length;
+        fuelLeft.sort(function(a,b){ return Math.abs(a.i-(nf-1)/2) - Math.abs(b.i-(nf-1)/2); });
+        for(var k2=0; k2<fuelLeft.length && dropped.length<need; k2++){ dropped.push(fuelLeft[k2].s); }
+      }
+      var dropSet = {};
+      dropped.forEach(function(s){ dropSet[s.id]=true; });
+      mid = mid.filter(function(x){ return !dropSet[x.s.id]; });
+    }
+    var waypoints = mid.map(function(x){ return coord(x.s); });
+    plan.url = "https://www.google.com/maps/dir/?api=1&origin=" + coord(origin)
+      + "&destination=" + coord(dest)
+      + (waypoints.length ? "&waypoints=" + waypoints.join("|") : "")
+      + "&travelmode=driving";
+    plan.used = mid.length;
+    plan.dropped = dropped.map(function(s){ return s.name; });
+    return plan;
+  }
+
+  // ---------- render ----------
+  var el = {};
+  ["h-title","h-meta","stats","add-input","add-btn","add-confirm","cf-note","cf-name","cf-lat","cf-lon","cf-add","cf-cancel",
+   "stops","stops-note","seed","range","route-link","route-note","route-drop","share-copy","wa-copy","export","import-file",
+   "import-paste","import-load","clear","toast","share-fallback","share-url"].forEach(function(id){ el[id]=document.getElementById(id); });
+
+  function renderHeader(){
+    el["h-title"].value = state.title;
+    el["h-meta"].textContent = state.date + " · depart " + state.time + " · " + state.fuel + " · " + state.tank + " L tank · "
+      + state.cons + " L/100 km · " + state.rangeLo + "–" + state.rangeHi + " km usable";
+    var t = totals();
+    var drive = t.drive!=null ? fmtDur(t.drive) : "—";
+    el.stats.innerHTML =
+        '<span class="stat"><span class="v">'+(t.km!=null?fmtKm(t.km):"—")+'</span><span class="l">km</span></span>'
+      + '<span class="stat"><span class="v">'+drive+'</span><span class="l">drive</span></span>'
+      + '<span class="stat"><span class="v">'+t.stops+'</span><span class="l">stops</span></span>'
+      + '<span class="stat eta"><span class="v">'+(t.eta||"—")+'</span><span class="l">ETA</span></span>';
+  }
+
+  function renderStops(){
+    var times = computeTimes();
+    var html = "";
+    stops.forEach(function(s, i){
+      var isFirst = i===0, isLast = i===stops.length-1;
+      var kind = isFirst ? "start" : (isLast ? "dest" : s.type);
+      var kmVal = s.km==null ? "" : s.km;
+      var badge = '<span class="stop-kind '+esc(s.type||"stretch")+'">'+TYPE_LABELS[kind]+'</span>'
+        + (s.example ? ' <span class="ex-badge">example</span>' : '');
+      var kmEst = s.kmEst ? '<span class="est" id="est-'+esc(s.id)+'">≈ straight-line est</span>' : '<span class="est" id="est-'+esc(s.id)+'" style="display:none"></span>';
+      html += '<article class="stop'+(s.example?' example':'')+'" role="listitem" data-id="'+esc(s.id)+'">'
+        + '<div class="stop-head">'
+          + '<div class="km-badge"><div class="k">'+(s.km==null?"—":s.km)+'</div><div class="l">km</div></div>'
+          + '<div class="stop-body">'
+            + '<div class="stop-name-row">'
+              + '<input type="text" data-id="'+esc(s.id)+'" data-field="name" value="'+esc(s.name)+'" aria-label="Stop name" autocomplete="off" spellcheck="false">'
+              + badge
+            + '</div>'
+            + '<div class="stop-time">'
+              + '<span class="time-pill"><span class="l">ETA </span><b>'+times[i]+'</b></span>'
+              + '<span class="time-pill"><span class="l">dwell </span><b>'+(s.dwell||0)+' min</b></span>'
+            + '</div>'
+          + '</div>'
+        + '</div>'
+        + '<div class="stop-fields">'
+          + '<div class="field"><label>km '+(isFirst?"(fixed 0)":"")+'</label>'
+            + '<input type="number" data-id="'+esc(s.id)+'" data-field="km" value="'+kmVal+'" step="0.1" inputmode="decimal" '+(isFirst?'readonly':'')+'>'+kmEst+'</div>'
+          + '<div class="field"><label>dwell (min)</label>'
+            + '<input type="number" data-id="'+esc(s.id)+'" data-field="dwell" value="'+(s.dwell||0)+'" step="1" inputmode="decimal" '+(isFirst||isLast?'readonly':'')+'></div>'
+          + '<div class="field"><label>type</label>'
+            + (isFirst||isLast
+                ? '<input type="text" value="'+TYPE_LABELS[kind]+'" readonly>'
+                : '<select data-id="'+esc(s.id)+'" data-field="type">'
+                    + TYPES.map(function(t){ return '<option value="'+t+'"'+(s.type===t?' selected':'')+'>'+TYPE_LABELS[t]+'</option>'; }).join("")
+                  + '</select>')
+          + '</div>'
+          + '<div class="field"><label>dog note</label>'
+            + '<input type="text" data-id="'+esc(s.id)+'" data-field="dog" value="'+esc(s.dog)+'" placeholder="e.g. grass, lead on" autocomplete="off" spellcheck="false"></div>'
+        + '</div>'
+        + '<details class="coords"><summary>Coordinates</summary>'
+          + '<div class="grid">'
+            + '<div class="field"><label>lat</label><input type="number" data-id="'+esc(s.id)+'" data-field="lat" value="'+(s.lat!=null?s.lat:"")+'" step="0.00001" inputmode="decimal" placeholder="—"></div>'
+            + '<div class="field"><label>lon</label><input type="number" data-id="'+esc(s.id)+'" data-field="lon" value="'+(s.lon!=null?s.lon:"")+'" step="0.00001" inputmode="decimal" placeholder="—"></div>'
+          + '</div></details>'
+        + '<div class="stop-actions">'
+          + '<a class="sbtn waze" href="'+wazeUrl(s)+'" rel="noopener">Waze</a>'
+          + '<a class="sbtn maps" href="'+mapsUrl(s)+'" rel="noopener">Maps</a>'
+          + '<button class="sbtn mini" type="button" data-move="up" data-id="'+esc(s.id)+'" '+(isFirst?'disabled':'')+' aria-label="Move up">↑</button>'
+          + '<button class="sbtn mini" type="button" data-move="down" data-id="'+esc(s.id)+'" '+(isLast?'disabled':'')+' aria-label="Move down">↓</button>'
+          + '<button class="sbtn del" type="button" data-del="1" data-id="'+esc(s.id)+'" aria-label="Delete stop">✕</button>'
+        + '</div>'
+      + '</article>';
+    });
+    el.stops.innerHTML = html;
+    el["stops-note"].textContent = stops.length
+      ? (stops.some(function(s){return s.example;}) ? "These are EXAMPLE rows — add a stop or tap “Start from outbound, reversed” and they’re replaced." : "Reorder with the arrows; first row is the start, last row is the destination.")
+      : "No stops yet — add one, or tap “Start from outbound, reversed”.";
+  }
+
+  function renderRange(){
+    var legs = fuelLegs();
+    var html = "";
+    if(!legs.length){
+      el.range.innerHTML = '<div class="cost">Add at least two stops to see the range plan.</div>';
+      return;
+    }
+    legs.forEach(function(leg){
+      var burned = round1(leg.km*state.cons/100);
+      var tankLeft = round1(state.tank - burned);
+      var kmLeft = Math.round(tankLeft/state.cons*100);
+      var over = leg.km > state.rangeHi;
+      html += '<div class="rr'+(over?' warnrow':'')+'">'
+        + '<span class="leg">'+esc(leg.from)+' → '+esc(leg.to)+'<small>'+fmtKm(leg.km)+' km</small></span>'
+        + '<span class="res">burns '+burned+' L · <b>'+tankLeft+' L</b> left ≈ '+kmLeft+' km</span>'
+        + '</div>';
+    });
+    var totalL = legs.reduce(function(a,l){ return a + round1(l.km*state.cons/100); }, 0);
+    html += '<div class="cost">'
+      + '<div class="disclaimer">Legs run from one refill point (start or a <b>fuel</b> stop) to the next. Each starts full; “L left” is what you arrive with before refilling. '
+      + 'Usable range '+state.rangeLo+'–'+state.rangeHi+' km — a leg over '+state.rangeHi+' is flagged red. '
+      + 'Burn '+state.cons+' L/100 km, tank '+state.tank+' L, total ~'+round1(totalL)+' L across '+legs.length+' leg'+(legs.length>1?'s':'')+'.</div></div>';
+    el.range.innerHTML = html;
+  }
+
+  function renderRoute(){
+    var plan = mapsPlan();
+    var link = el["route-link"];
+    if(plan.url){
+      link.href = plan.url;
+      link.removeAttribute("disabled");
+    } else {
+      link.href = "#";
+      link.setAttribute("disabled","disabled");
+    }
+    var note = "Google Maps takes at most " + MAX_WAYPOINTS + " waypoints between start and finish. The link keeps the first and last stops and every fuel stop.";
+    if(plan.used) note += " Using " + plan.used + " of " + MAX_WAYPOINTS + " waypoints.";
+    if(plan.skipped) note += " <b>" + plan.skipped + " stop" + (plan.skipped>1?"s":"") + " skipped — no coordinates.</b>";
+    el["route-note"].innerHTML = note;
+    var drop = el["route-drop"];
+    if(plan.dropped.length){
+      drop.hidden = false;
+      drop.textContent = "To stay inside Google's " + MAX_WAYPOINTS + "-waypoint limit, this link left out: "
+        + plan.dropped.join(", ") + ". Open them individually from their Maps buttons.";
+    } else {
+      drop.hidden = true;
+    }
+  }
+
+  function render(){
+    renderHeader();
+    renderStops();
+    renderRange();
+    renderRoute();
+  }
+
+  // ---------- actions ----------
+  function clearExamples(){
+    if(stops.some(function(s){ return s.example; })){
+      stops = stops.filter(function(s){ return !s.example; });
+      state.stops = stops;
+    }
+  }
+  function addStop(obj){
+    clearExamples();
+    if(!stops.length) obj.km = 0, obj.kmEst = false, obj.dwell = 0;
+    else {
+      var prev = stops[stops.length-1];
+      if(obj.lat!=null && obj.lon!=null && prev.lat!=null && prev.lon!=null){
+        var base = prev.km!=null ? prev.km : 0;
+        obj.km = round1(base + haversineKm(prev.lat, prev.lon, obj.lat, obj.lon));
+        obj.kmEst = true;
+      } else {
+        obj.km = null; obj.kmEst = false;
+      }
+      obj.dwell = obj.dwell==null ? 15 : obj.dwell;
+    }
+    obj.id = genId();
+    obj.dog = obj.dog||"";
+    stops.push(obj);
+    state.stops = stops;
+    save(); render();
+  }
+
+  function openConfirm(parsed){
+    el["add-confirm"].hidden = false;
+    el["cf-note"].innerHTML = parsed.ok
+      ? "Understood: <b>" + esc(parsed.source) + "</b>"
+      : "<b>Couldn’t read coordinates</b> — “" + esc(parsed.raw) + "”. It will be added by name and link out by search. Nothing is lost.";
+    el["cf-name"].value = parsed.name||parsed.raw||"";
+    el["cf-lat"].value = parsed.lat!=null ? parsed.lat : "";
+    el["cf-lon"].value = parsed.lon!=null ? parsed.lon : "";
+    if(parsed.lat==null && parsed.lon==null && parsed.ok && /name only/.test(parsed.source)){
+      el["cf-note"].innerHTML = "Understood: <b>name only</b> — no coordinates, so Waze/Maps will link out by search. Fill lat/lon if you know them.";
+    }
+  }
+
+  var lastRemoved = null;
+  var toastTimer = null;
+  function toast(html, ms){
+    el.toast.innerHTML = html;
+    el.toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.toast.classList.remove("show"); }, ms||4000);
+  }
+  function removeStop(id){
+    var i = -1;
+    for(var k=0;k<stops.length;k++){ if(stops[k].id===id){ i=k; break; } }
+    if(i<0) return;
+    var removed = stops.splice(i,1)[0];
+    state.stops = stops;
+    save(); render();
+    toast('Removed “'+esc(removed.name)+'”. <button class="undo" id="undo" type="button">Undo</button>', 6500);
+    var u = document.getElementById("undo");
+    if(u) u.addEventListener("click", function(){
+      stops.splice(Math.min(i, stops.length), 0, removed);
+      state.stops = stops; save(); render();
+      el.toast.classList.remove("show");
+    });
+  }
+  function move(id, dir){
+    var i = -1;
+    for(var k=0;k<stops.length;k++){ if(stops[k].id===id){ i=k; break; } }
+    if(i<0) return;
+    var j = i + (dir==="up" ? -1 : 1);
+    if(j<0 || j>=stops.length) return;
+    var t = stops[i]; stops[i]=stops[j]; stops[j]=t;
+    state.stops = stops; save(); render();
+  }
+  function seedReversed(){
+    if(!stops.some(function(s){ return !s.example; })){
+      stops = JSON.parse(JSON.stringify(OUTBOUND_SEED));
+      stops.forEach(function(s){ s.id = genId(); });
+      state.stops = stops; save(); render();
+      toast("Seeded from the outbound plan, reversed — adjust km and times as needed.");
+      return;
+    }
+    seedArmed = true;
+    toast('Replace your stops with the reversed outbound route? <button class="undo" id="seed-yes" type="button">Yes, replace</button>', 6500);
+    var y = document.getElementById("seed-yes");
+    if(y) y.addEventListener("click", function(){
+      stops = JSON.parse(JSON.stringify(OUTBOUND_SEED));
+      stops.forEach(function(s){ s.id = genId(); });
+      state.stops = stops; save(); render();
+      el.toast.classList.remove("show");
+    });
+  }
+  var seedArmed = false;
+
+  function copyText(text, okMsg, fallbackId, fieldId, btn){
+    var done = function(){ toast(okMsg); };
+    var fallback = function(){
+      var f = document.getElementById(fallbackId), field = document.getElementById(fieldId);
+      if(f && field){ f.hidden = false; field.value = text; field.focus(); try{ field.select(); }catch(e){} }
+    };
+    var p = null;
+    try { if(navigator.clipboard && navigator.clipboard.writeText) p = navigator.clipboard.writeText(text); } catch(e){ p=null; }
+    if(p && typeof p.then === "function"){ p.then(done, function(){ legacyCopy(text) ? done() : fallback(); }); }
+    else if(legacyCopy(text)){ done(); }
+    else { fallback(); }
+  }
+  function legacyCopy(text){
+    var t = document.createElement("textarea");
+    t.value = text; t.setAttribute("readonly","");
+    t.style.position="fixed"; t.style.top="-1000px"; t.style.opacity="0";
+    document.body.appendChild(t);
+    var ok=false;
+    try { t.select(); ok = document.execCommand("copy"); } catch(e){ ok=false; }
+    document.body.removeChild(t);
+    return ok;
+  }
+
+  function shareUrl(){
+    var base = location.href.split("#")[0];
+    return base + HASH_PREFIX + encodeState(state);
+  }
+  function whatsappText(){
+    var times = computeTimes();
+    var lines = stops.map(function(s,i){
+      return (s.km!=null?s.km:"—") + " | " + s.name + " | " + times[i] + " | " + wazeUrl(s);
+    });
+    return lines.join("\n");
+  }
+  function exportJson(){
+    copyText(JSON.stringify(state, null, 2), "JSON copied to clipboard", "share-fallback", "share-url", null);
+  }
+  function importJson(text){
+    try {
+      var obj = JSON.parse(text);
+      state = sanitize(obj);
+      stops = state.stops;
+      save(); render();
+      toast("Imported " + stops.length + " stop" + (stops.length===1?"":"s") + ".");
+    } catch(e){
+      toast("That isn’t valid JSON — nothing changed.");
+    }
+  }
+
+  // ---------- events ----------
+  document.querySelectorAll("[data-setting]").forEach(function(inp){
+    var k = inp.getAttribute("data-setting");
+    var ev = inp.tagName==="SELECT" ? "change" : "input";
+    inp.addEventListener(ev, function(){
+      if(k==="tank"||k==="cons"||k==="rangeLo"||k==="rangeHi"||k==="speed") state[k] = parseFloat(inp.value)||0;
+      else state[k] = inp.value;
+      save(true);
+      renderHeader(); renderRange(); renderRoute();
+    });
+  });
+
+  function doAdd(){
+    var parsed = parseInput(el["add-input"].value);
+    if(!parsed.ok && parsed.error==="empty"){ toast("Type or paste a link, coordinates, or a name first."); return; }
+    openConfirm(parsed);
+  }
+  el["add-btn"].addEventListener("click", doAdd);
+  el["add-input"].addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); doAdd(); } });
+
+  el["cf-add"].addEventListener("click", function(){
+    var name = el["cf-name"].value.trim() || "Stop";
+    var lat = el["cf-lat"].value.trim(), lon = el["cf-lon"].value.trim();
+    var la = lat!=="" && isFinite(parseFloat(lat)) ? parseFloat(lat) : null;
+    var lo = lon!=="" && isFinite(parseFloat(lon)) ? parseFloat(lon) : null;
+    addStop({ name:name, lat:la, lon:lo, km:null, kmEst:false, dwell:15, type:"stretch", dog:"" });
+    el["add-input"].value = "";
+    el["add-confirm"].hidden = true;
+  });
+  el["cf-cancel"].addEventListener("click", function(){ el["add-confirm"].hidden = true; });
+
+  el.stops.addEventListener("input", onStopField);
+  el.stops.addEventListener("change", onStopField);
+  function findStop(id){ for(var i=0;i<stops.length;i++){ if(stops[i].id===id) return stops[i]; } return null; }
+  function onStopField(e){
+    var t = e.target;
+    var id = t.getAttribute && t.getAttribute("data-id");
+    var f = t.getAttribute && t.getAttribute("data-field");
+    if(!id || !f) return;
+    var s = findStop(id); if(!s) return;
+    if(f==="name"){ s.name = t.value; save(true); renderHeader(); renderRange(); renderRoute(); }
+    else if(f==="dog"){ s.dog = t.value; save(true); }
+    else if(f==="km"){ var v = parseFloat(t.value); s.km = isFinite(v)?v:null; s.kmEst = false;
+      var badge = document.getElementById("est-"+id); if(badge) badge.style.display = "none";
+      save(true); renderHeader(); renderRange(); renderRoute(); }
+    else if(f==="dwell"){ s.dwell = parseFloat(t.value)||0; save(true); renderHeader(); renderRange(); }
+    else if(f==="type"){ s.type = t.value; save(true); renderRange(); renderRoute(); }
+    else if(f==="lat"){ var la = parseFloat(t.value); s.lat = isFinite(la)?la:null; save(true); renderRoute(); }
+    else if(f==="lon"){ var lo = parseFloat(t.value); s.lon = isFinite(lo)?lo:null; save(true); renderRoute(); }
+  }
+  el.stops.addEventListener("click", function(e){
+    var t = e.target.closest ? e.target.closest("[data-move],[data-del]") : null;
+    if(!t) return;
+    var id = t.getAttribute("data-id");
+    if(t.hasAttribute("data-move")) move(id, t.getAttribute("data-move"));
+    else if(t.hasAttribute("data-del")) removeStop(id);
+  });
+
+  el.seed.addEventListener("click", seedReversed);
+  el["share-copy"].addEventListener("click", function(){ copyText(shareUrl(), "Share link copied", "share-fallback", "share-url", null); });
+  el["wa-copy"].addEventListener("click", function(){ copyText(whatsappText(), "WhatsApp list copied", "share-fallback", "share-url", null); });
+  el["export"].addEventListener("click", exportJson);
+  el["import-file"].addEventListener("change", function(){
+    var f = this.files && this.files[0];
+    if(!f) return;
+    var r = new FileReader();
+    r.onload = function(){ importJson(String(r.result)); el["import-file"].value = ""; };
+    r.readAsText(f);
+  });
+  el["import-load"].addEventListener("click", function(){ importJson(el["import-paste"].value); });
+
+  var clearArmed = false;
+  el.clear.addEventListener("click", function(){
+    if(!clearArmed){
+      clearArmed = true;
+      el.clear.textContent = "Tap again to confirm";
+      el.clear.classList.add("danger");
+      setTimeout(function(){ clearArmed=false; el.clear.textContent="Clear all"; el.clear.classList.remove("danger"); }, 3000);
+      return;
+    }
+    clearArmed = false;
+    stops = JSON.parse(JSON.stringify(EXAMPLE_STOPS));
+    state.stops = stops;
+    save(); render();
+    el.clear.textContent = "Clear all"; el.clear.classList.remove("danger");
+    toast("Cleared — example rows restored.");
+  });
+
+  // restore settings inputs from state (in case load() picked defaults/import)
+  document.getElementById("f-date").value = state.date;
+  document.getElementById("f-time").value = state.time;
+  document.getElementById("f-fuel").value = state.fuel;
+  document.getElementById("f-tank").value = state.tank;
+  document.getElementById("f-cons").value = state.cons;
+  document.getElementById("f-rlo").value = state.rangeLo;
+  document.getElementById("f-rhi").value = state.rangeHi;
+  document.getElementById("f-speed").value = state.speed;
+
+  render();
+
+  // Test hook — inert in normal use; lets the verification harness exercise the pure functions.
+  if(typeof window!=="undefined" && window.__RETURN_TEST_HOOK__){
+    window.__RETURN_TEST_HOOK__({
+      parseInput:parseInput, encodeState:encodeState, decodeState:decodeState,
+      mapsPlan:mapsPlan, fuelLegs:fuelLegs, computeTimes:computeTimes, totals:totals,
+      whatsappText:whatsappText, shareUrl:shareUrl, importJson:importJson,
+      getState:function(){ return state; }, getStops:function(){ return stops; }
+    });
+  }
+})();
+</script>
+</body>
+</html>

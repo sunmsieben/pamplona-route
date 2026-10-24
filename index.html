@@ -40,6 +40,10 @@
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
     border-bottom:1px solid var(--border);padding:10px 12px 12px;}
   .h-title{font-size:1.22rem;font-weight:700;line-height:1.2;}
+  .h-top{display:flex;align-items:flex-start;gap:10px;}
+  .crosslink{flex:0 0 auto;font-size:.8rem;font-weight:700;text-decoration:none;color:var(--muted);
+    border:1px solid var(--border);border-radius:99px;padding:5px 11px;white-space:nowrap;margin-left:auto;
+    min-height:36px;display:flex;align-items:center;}
   .h-meta{color:var(--muted);font-size:.92rem;margin-top:2px;}
   .h-clock{color:var(--text);font-variant-numeric:tabular-nums;font-weight:600;}
   .progress-row{display:flex;align-items:baseline;justify-content:space-between;
@@ -242,7 +246,10 @@
 
 <header>
   <div class="wrap" style="padding:0;">
-    <div class="h-title">Rotterdam → Pamplona</div>
+    <div class="h-top">
+      <div class="h-title">Rotterdam → Pamplona</div>
+      <a class="crosslink" href="return.html" rel="noopener">way back →</a>
+    </div>
     <div class="h-meta">Sun 25 Oct 2026 · <span class="h-clock" id="clock">--:--</span> · departed 04:30 (winter time) · E10 · 50 L</div>
     <div class="progress-row">
       <span id="km-label"><b>0</b> / 1 342 km</span>
