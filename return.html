@@ -53,13 +53,14 @@
   /* ---------- Forms ---------- */
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .grid .full{grid-column:1 / -1;}
-  .field{display:flex;flex-direction:column;gap:4px;}
+  .field{display:flex;flex-direction:column;gap:4px;min-width:0;}
   .field.span2{grid-column:1 / -1;}
   .field label{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
   .field input,.field select{min-height:48px;padding:8px 10px;border-radius:9px;background:var(--bg);
     border:1px solid var(--border);color:var(--text);font-size:1rem;width:100%;}
   .field .hint{font-size:.74rem;color:var(--muted);line-height:1.3;}
   .inline-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .inline-3 input,.inline-3 select{min-width:0;width:100%;}
 
   /* ---------- Add stop ---------- */
   .addbox{display:flex;gap:8px;align-items:stretch;}
@@ -191,8 +192,8 @@
       <div class="field span2">
         <label for="f-date">Date · departure</label>
         <div class="inline-3">
-          <input id="f-date" data-setting="date" type="date">
-          <input id="f-time" data-setting="time" type="time">
+          <input id="f-date" data-setting="date" type="date" aria-label="Date">
+          <input id="f-time" data-setting="time" type="time" aria-label="Departure time">
           <select id="f-fuel" data-setting="fuel" aria-label="Fuel type">
             <option value="E10">E10</option>
             <option value="E5">E5</option>
@@ -345,6 +346,10 @@
   // ---------- helpers ----------
   function pad(n){ return (n<10?"0":"")+n; }
   function fmt(m){ m = Math.round(m); return pad(Math.floor(m/60)%24) + ":" + pad(m%60); }
+  function fmtClock(total){
+    var day = Math.floor(total/1440);
+    return (day>0 ? "+"+day+"d " : "") + fmt(total);
+  }
   function fmtDur(min){
     if(min==null || !isFinite(min)) return "—";
     var h = Math.floor(min/60), m = Math.round(min%60);
@@ -498,7 +503,7 @@
         if(a!=null && b!=null && b>=a) cumDrive += (b-a)/state.speed*60;
         cumDwell += (stops[i-1].dwell||0);
       }
-      arr.push(fmt(depart + cumDrive + cumDwell));
+      arr.push(fmtClock(depart + cumDrive + cumDwell));
     }
     return arr;
   }
