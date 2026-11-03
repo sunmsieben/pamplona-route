@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d1117">
-<meta name="description" content="Way back · Pamplona → Rotterdam — build the return drive yourself: add stops by link or name, see range and ETA live, autosaved to this phone.">
+<meta name="description" content="Way back · Pamplona → Rotterdam — the verified return plan (leave 05:00, fill in Pamplona, via Paris), fully editable: add stops by link or name, see range and ETA live, autosaved to this phone.">
 <title>Way back · Pamplona → Rotterdam</title>
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20128%20128%27%3E%3Crect%20width=%27128%27%20height=%27128%27%20rx=%2724%27%20fill=%27%230d1117%27/%3E%3Cpath%20d=%27M24%2092%20C40%2020%2060%20108%2088%2030%27%20stroke=%27%2333ccff%27%20stroke-width=%2710%27%20fill=%27none%27%20stroke-linecap=%27round%27/%3E%3Ccircle%20cx=%2724%27%20cy=%2792%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3Ccircle%20cx=%2788%27%20cy=%2730%27%20r=%279%27%20fill=%27%23e6edf3%27/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
@@ -160,6 +160,26 @@
   .cost{padding:10px 12px 12px;font-size:.82rem;color:var(--muted);}
   .cost .disclaimer{font-size:.76rem;margin-top:6px;}
 
+  /* ---------- Plan ---------- */
+  .plan{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 4px;margin:0 0 14px;overflow-wrap:anywhere;}
+  .plan-lead{margin:0 0 6px;font-size:1rem;line-height:1.4;}
+  .plan-lead .eta{color:var(--waze);font-variant-numeric:tabular-nums;}
+  .plan .sub{margin:0 0 8px;color:var(--muted);font-size:.82rem;line-height:1.4;}
+  .pl{border-top:1px solid var(--border);}
+  .pl summary{cursor:pointer;min-height:48px;display:flex;align-items:center;font-weight:700;font-size:.98rem;}
+  .pl .pl-body{padding:0 0 12px;font-size:.9rem;line-height:1.45;}
+  .pl .pl-body p{margin:0 0 8px;}
+  .pl ul{margin:0 0 8px;padding-left:20px;}
+  .pl li{margin:0 0 4px;}
+  .pl .quiet{color:var(--muted);font-size:.82rem;}
+  .pl .callout{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.35);border-radius:9px;padding:8px 10px;margin:0 0 8px;}
+  .pl .callout.warn{background:rgba(211,153,34,.12);border-color:rgba(211,153,34,.35);}
+  .plan-links{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0;}
+  .plan-links .sbtn{min-height:48px;flex:1 1 140px;}
+  .fuelplan{padding:12px;font-size:.88rem;line-height:1.45;overflow-wrap:anywhere;}
+  .fuelplan p{margin:0 0 8px;}
+  .fuelplan .quiet{color:var(--muted);font-size:.8rem;}
+
   /* ---------- Toast ---------- */
   #toast{position:fixed;left:12px;right:12px;bottom:14px;max-width:560px;margin:0 auto;z-index:100;
     background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;
@@ -189,6 +209,65 @@
 
 <div class="wrap">
 
+  <h2 class="sec">The plan</h2>
+  <section class="plan" aria-label="Return plan">
+    <p class="plan-lead"><b>Leave Pamplona <span data-live="depart">05:00</span> · Rotterdam <span class="eta" data-live="eta">20:17</span></b><br>
+      <span data-live="km">1 317</span> km · <span data-live="drive">14 h 06</span> driving · <span data-live="dwell">1 h 10</span> stopped</p>
+    <p class="sub">Seeded figures follow your edits; the explanations below do not. Arrival band 19:50–20:50, free-flow, no traffic model, and it assumes the Paris line below. Pamplona is a city-centre placeholder; Rotterdam is the Centrum placeholder (±10 km / ±10 min against your real door).</p>
+
+    <details class="pl" open>
+      <summary>Fill up before you leave</summary>
+      <div class="pl-body">
+        <div class="callout"><b>Fill here before leaving, cross the border on a full 50 L tank of Spanish fuel — no border stop.</b></div>
+        <p><b>Petroprix Berrioplano</b> · 24 h · 95 E5 <b>€1.619/L</b> (MITECO feed, 03/11/2026 15:02) · 42.83367, -1.65231 · 2.4 km from the centre, no detour worth counting.</p>
+        <p class="quiet">Cheaper than the border forecourts on the same feed (€1.619 vs €1.689 Bidasoil, €1.809 Repsol), and it removes a stop entirely.</p>
+        <div class="plan-links">
+          <a class="sbtn waze" href="https://waze.com/ul?ll=42.83367,-1.65231&amp;navigate=yes" rel="noopener">Waze · Petroprix</a>
+          <a class="sbtn maps" href="https://maps.google.com/?q=42.83367,-1.65231" rel="noopener">Maps · Petroprix</a>
+        </div>
+        <p class="quiet" style="margin-top:10px;">Fallback: if you would rather top up at the border, <b>Bidasoil Behobia</b> (43.33581, -1.75271; 07:00–22:00 Sun; €1.689) or the 24 h <b>Repsol Comete Sarea 1</b> (43.33853, -1.75369; €1.809), 314 m away — but then you are adding a 15-min stop to save nothing.</p>
+        <div class="plan-links">
+          <a class="sbtn maps" href="https://maps.google.com/?q=43.33581,-1.75271" rel="noopener">Maps · Bidasoil</a>
+          <a class="sbtn maps" href="https://maps.google.com/?q=43.33853,-1.75369" rel="noopener">Maps · Repsol</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="pl" open>
+      <summary>Through Paris — and why</summary>
+      <div class="pl-body">
+        <p><b>A10 → A86 → A3 → A1</b>, 1 317 km / 14 h 06, crossing the Île-de-France on the <b>inner ring, never the Boulevard Périphérique</b> (the périphérique variant is the same distance and 19 min slower). Target the crossing at <b>15:00–16:00</b>.</p>
+        <p>You asked for the shortest total time unless Paris is needed. The Paris bypass is not free, so the answer is: it is needed.</p>
+        <p class="quiet">The bypass — A10 → A28 Rouen → A29 Amiens → A1 — is 1 434 km: <b>+117 km and +1 h 42</b>. Free-flow figures, OSRM, 3 Nov 2026. The Paris crossing would have to run more than ~1 h 40 slower than free-flow to lose that margin.</p>
+        <p><b>Stops:</b> two, about 35 min each — Poitiers-Chincé (km 551, fuel + lunch) and Assevillers (km 1 003, fuel + break). Drive legs 5 h 48 · 4 h 43 · 3 h 36. The first leg runs 48 min over your 4–5 h band because the border stop is gone; the nearest aire before Poitiers (Châtellerault-Usseau) is only 27 km earlier, so it buys nothing.</p>
+      </div>
+    </details>
+
+    <details class="pl">
+      <summary>Why 05:00</summary>
+      <div class="pl-body">
+        <ul>
+          <li>Paris at 15:00, ahead of the Toussaint school-holiday return wave (15:00–20:00 on exactly the A10 north and A1 north axes).</li>
+          <li>Rotterdam before 21:00 — dinner, dog walk, unload.</li>
+          <li>Sunrise ~07:45, sunset ~17:15. Only the last leg is dark, and it is motorway.</li>
+          <li>Honest cost: a 04:20 alarm, dog walked at 04:40.</li>
+        </ul>
+        <p class="quiet">The losing option: a 17:30 start puts Paris at 03:30 — no measurable time saved, 14 h of night driving with a dog. Not recommended.</p>
+      </div>
+    </details>
+
+    <details class="pl" open>
+      <summary>Cautions</summary>
+      <div class="pl-body">
+        <div class="callout warn"><b>1 Nov 2026 is Sunday, Toussaint, and the last weekend of the French school holidays</b> — the busiest autumn return on these exact axes. HGV ban Sat 22:00 → Sun 22:00: lorries gone, aires fuller.</div>
+        <ul>
+          <li>Roadworks unverified — check vinci-autoroutes.com and sanef.com on the day.</li>
+          <li>Péage: carry a physical card and ~€20 cash.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
   <h2 class="sec">Trip &amp; car</h2>
   <section class="card" aria-label="Trip settings">
     <div class="grid">
@@ -198,7 +277,7 @@
           <input id="f-date" data-setting="date" type="date" aria-label="Date">
           <input id="f-time" data-setting="time" type="time" aria-label="Departure time">
         </div>
-        <span class="hint">Default Sun 1 Nov 2026, 09:00. Everything below recomputes from these.</span>
+        <span class="hint">Default Sun 1 Nov 2026, 05:00. Everything below recomputes from these.</span>
       </div>
       <div class="field span2">
         <label for="f-fuel">Fuel type</label>
@@ -227,8 +306,8 @@
       </div>
       <div class="field">
         <label for="f-speed">Avg speed (km/h)</label>
-        <input id="f-speed" data-setting="speed" type="number" min="30" max="140" step="5" inputmode="decimal">
-        <span class="hint">For driving-time estimates only.</span>
+        <input id="f-speed" data-setting="speed" type="number" min="30" max="140" step="any" inputmode="decimal">
+        <span class="hint">Only for legs with no planned drive time (blank “drive from previous” on a stop).</span>
       </div>
     </div>
   </section>
@@ -267,12 +346,21 @@
   <section class="card" aria-label="Stops">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
       <span class="lede" style="margin:0;" id="stops-note">Reorder with the arrows; first row is the start, last row is the destination.</span>
-      <button class="btn alt" id="seed" type="button">Start from outbound, reversed</button>
+      <span style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn alt" id="restore" type="button">Restore verified plan</button>
+        <button class="btn alt" id="seed" type="button">Start from outbound, reversed</button>
+      </span>
     </div>
     <div id="stops" role="list"></div>
   </section>
 
   <h2 class="sec">Fuel &amp; range</h2>
+  <section class="card fuelplan" aria-label="Seeded fuel plan">
+    <p><b>Three fills:</b> Pamplona (Spain, Petroprix, to full) → Poitiers (ENI) → Assevillers (TotalEnergies). As seeded, at 6.5 L/100 km:</p>
+    <p>1 317 km burns <b>85.6 L</b>. Poitiers (km 551): 50 − 35.8 = <b>14.2 L left (~218 km)</b> — the lowest reserve. Assevillers (452 km later): 50 − 29.4 = 20.6 L (~317 km). Rotterdam (314 km later): 50 − 20.4 = <b>29.6 L (~455 km)</b>.</p>
+    <p>At 7.0 L/100 km the low point is still 11.4 L (~163 km), so the plan does not depend on hitting 6.5.</p>
+    <p class="quiet">Spain: 95 E5 €1.619/L, MITECO feed 03/11/2026 15:02. The two French fills are unpriced — no sourced figure; read the pump. Live legs below recompute from your stops.</p>
+  </section>
   <section class="rng" id="range" aria-live="polite"></section>
 
   <h2 class="sec">Route &amp; share</h2>
@@ -302,7 +390,7 @@
   </section>
 
   <footer>
-    <p><b>Estimates only.</b> Straight-line km, 90 km/h average and your own L/100 km are planning numbers, not measurements. Distances between stops are crow-flies unless you overwrite the km field — real roads run longer.</p>
+    <p><b>Estimates only.</b> The seeded km and drive times are free-flow road figures from OSRM (3 Nov 2026), with no traffic model. Stops you add get straight-line km (marked “est”) unless you overwrite the km field — real roads run longer.</p>
     <p>Everything autosaves to this phone and survives a lock or reload. The share link encodes the whole plan in the URL, so your co-driver opens the same page. No data leaves the phone.</p>
     <div style="display:flex;justify-content:flex-end;">
       <button class="btn warn-t" id="clear" type="button">Clear all</button>
@@ -316,7 +404,8 @@
 (function(){
   "use strict";
 
-  var KEY = "pamplona-return-v1";
+  var KEY = "pamplona-return-v2";
+  var OLD_KEY = "pamplona-return-v1";
   var HASH_PREFIX = "#s=";
   var MAX_WAYPOINTS = 9;
 
@@ -325,6 +414,21 @@
     { id:"ex1", name:"Aire de Bordeaux — stretch (example)", lat:44.83, lon:-0.61, km:240, kmEst:true, dwell:15, type:"stretch", dog:"", example:true },
     { id:"ex2", name:"Aire de Poitiers — fuel (example)", lat:46.58, lon:0.34, km:480, kmEst:true, dwell:10, type:"fuel", dog:"", example:true },
     { id:"ex3", name:"Rotterdam — home (example)", lat:null, lon:null, km:1342, kmEst:true, dwell:0, type:"dest", dog:"", example:true }
+  ];
+
+  // The verified return plan (steps 24–25, OSRM free-flow, 3 Nov 2026). Seeded rows are ordinary rows:
+  // legMin = planned drive minutes from the previous row; blank/null falls back to km ÷ avg speed.
+  var RETURN_SEED = [
+    { id:"rt0", name:"Pamplona — start (city-centre placeholder)", lat:42.81253, lon:-1.64577, km:0, kmEst:false, dwell:0, type:"stretch", legMin:null,
+      dog:"", note:"Fill at Petroprix Berrioplano first (24 h, E5 €1.619/L, 42.83367, -1.65231). Walk the dog 04:40." },
+    { id:"rt1", name:"Aire de Poitiers-Chincé (A10 north)", lat:46.70211, lon:0.37176, km:551, kmEst:false, dwell:35, type:"fuel", legMin:348,
+      dog:"No dedicated area — field track 113 m, cropland, lead on, muddy in November.",
+      note:"ENI fuel, Casino Everyday, Courtepaille Comptoir (sit-down, opens 11:30), PAUL, toilets, showers, wifi. Fuel + lunch." },
+    { id:"rt2", name:"Aire Cœur des Hauts-de-France Est (Assevillers, A1 north km 121)", lat:49.88800, lon:2.84115, km:1003, kmEst:false, dwell:35, type:"fuel", legMin:283,
+      dog:"Park 5 m from the parking — the best of the two.",
+      note:"TotalEnergies, full service area, toilets. Fuel + break." },
+    { id:"rt3", name:"Rotterdam — home (Centrum placeholder, ±10 km / ±10 min)", lat:51.9225, lon:4.4792, km:1317, kmEst:false, dwell:0, type:"stretch", legMin:215.5,
+      dog:"", note:"Arrival ~20:17, band 19:50–20:50 (assumes the Paris line)." }
   ];
 
   // Frozen outbound facts, reversed. km = 1342 − outbound km (same corridor, read backwards).
@@ -338,12 +442,12 @@
     { name:"Aire de Blois-Villerbon", lat:47.66448, lon:1.38590, km:725, kmEst:false, dwell:45, type:"lunch" },
     { name:"Aire de Limours-Janvry", lat:48.63609, lon:2.14652, km:863, kmEst:false, dwell:20, type:"stretch" },
     { name:"Aire de Wancourt Ouest", lat:50.26222, lon:2.86299, km:1071, kmEst:false, dwell:15, type:"stretch" },
-    { name:"Gabriëls Deurne", lat:51.23585, lon:4.48494, km:1244.5, kmEst:false, dwell:18, type:"fuel" },
-    { name:"Rotterdam — home", lat:null, lon:null, km:1342, kmEst:false, dwell:0, type:"dest" }
+    { name:"Gabriëls Deurne", lat:null, lon:null, km:1244.5, kmEst:false, dwell:18, type:"fuel" },
+    { name:"Rotterdam — home", lat:51.9225, lon:4.4792, km:1342, kmEst:false, dwell:0, type:"dest" }
   ];
 
   var DEFAULTS = {
-    v:1, title:"Way back · Pamplona → Rotterdam", date:"2026-11-01", time:"09:00",
+    v:1, title:"Way back · Pamplona → Rotterdam", date:"2026-11-01", time:"05:00",
     fuel:"E10", tank:50, cons:6.5, rangeLo:650, rangeHi:680, speed:90
   };
   var TYPES = ["fuel","lunch","stretch","overnight"];
@@ -358,12 +462,11 @@
   }
   function fmtDur(min){
     if(min==null || !isFinite(min)) return "—";
-    var h = Math.floor(min/60), m = Math.round(min%60);
-    if(m===60){ h++; m=0; }
+    var h = Math.floor(min/60), m = Math.floor(min%60 + 1e-9);
     if(h===0) return m + " min";
-    return h + " h" + (m ? " " + m + " min" : "");
+    return h + " h " + pad(m);
   }
-  function toMin(hhmm){ var p = (hhmm||"09:00").split(":"); return (+p[0])*60 + (+p[1]); }
+  function toMin(hhmm){ var p = (hhmm||"05:00").split(":"); return (+p[0])*60 + (+p[1]); }
   function round1(n){ return Math.round(n*10)/10; }
   function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
   function coord(s){
@@ -400,6 +503,8 @@
       dwell: num(s.dwell, 0),
       type: TYPES.indexOf(s.type)>=0 ? s.type : "stretch",
       dog: typeof s.dog==="string" ? s.dog : "",
+      note: typeof s.note==="string" ? s.note : "",
+      legMin: s.legMin!=null && isFinite(parseFloat(s.legMin)) && parseFloat(s.legMin)>=0 ? parseFloat(s.legMin) : null,
       example: !!s.example
     };
   }
@@ -435,8 +540,19 @@
       var v = localStorage.getItem(KEY);
       if(v) return sanitize(JSON.parse(v));
     } catch(e){}
+    try {
+      // v1 held the empty builder; keep it only if the user actually built something there.
+      var old = localStorage.getItem(OLD_KEY);
+      if(old){
+        var o = sanitize(JSON.parse(old));
+        if(o.stops.some(function(s){ return !s.example; })) return o;
+      }
+    } catch(e){}
+    return seededState();
+  }
+  function seededState(){
     var d = JSON.parse(JSON.stringify(DEFAULTS));
-    d.stops = JSON.parse(JSON.stringify(EXAMPLE_STOPS));
+    d.stops = JSON.parse(JSON.stringify(RETURN_SEED)).map(sanitizeStop);
     return d;
   }
 
@@ -499,14 +615,25 @@
   }
 
   // ---------- computed ----------
+  // Speed-based estimate of the drive into stop i (minutes); 0 when km is missing or goes backwards.
+  function estLeg(i){
+    if(i<1) return 0;
+    var a = stops[i-1].km, b = stops[i].km;
+    return (a!=null && b!=null && b>=a && state.speed>0) ? (b-a)/state.speed*60 : 0;
+  }
+  // Drive into stop i: the planned legMin when set, otherwise the speed estimate.
+  function legDrive(i){
+    if(i<1) return 0;
+    var m = stops[i].legMin;
+    return (m!=null && isFinite(m)) ? m : estLeg(i);
+  }
   function computeTimes(){
     var depart = toMin(state.time);
     var arr = [];
     var cumDrive = 0, cumDwell = 0;
     for(var i=0;i<stops.length;i++){
       if(i>0){
-        var a = stops[i-1].km, b = stops[i].km;
-        if(a!=null && b!=null && b>=a) cumDrive += (b-a)/state.speed*60;
+        cumDrive += legDrive(i);
         cumDwell += (stops[i-1].dwell||0);
       }
       arr.push(fmtClock(depart + cumDrive + cumDwell));
@@ -520,7 +647,7 @@
       if(last.km!=null) t.km = last.km;
       for(var i=1;i<stops.length-1;i++){ t.dwell += (stops[i].dwell||0); }
       t.stops = Math.max(0, stops.length-2);
-      if(t.km!=null) t.drive = t.km/state.speed*60;
+      if(t.km!=null){ t.drive = 0; for(var j=1;j<stops.length;j++){ t.drive += legDrive(j); } }
       var times = computeTimes();
       t.eta = times[times.length-1];
     }
@@ -585,7 +712,7 @@
   // ---------- render ----------
   var el = {};
   ["h-title","h-meta","stats","add-input","add-btn","add-confirm","cf-note","cf-name","cf-lat","cf-lon","cf-add","cf-cancel",
-   "stops","stops-note","seed","range","route-link","route-note","route-drop","share-copy","wa-copy","export","import-file",
+   "stops","stops-note","seed","restore","range","route-link","route-note","route-drop","share-copy","wa-copy","export","import-file",
    "import-paste","import-load","clear","toast","share-fallback","share-url"].forEach(function(id){ el[id]=document.getElementById(id); });
 
   function renderHeader(){
@@ -599,6 +726,11 @@
       + '<span class="stat"><span class="v">'+drive+'</span><span class="l">drive</span></span>'
       + '<span class="stat"><span class="v">'+t.stops+'</span><span class="l">stops</span></span>'
       + '<span class="stat eta"><span class="v">'+(t.eta||"—")+'</span><span class="l">ETA</span></span>';
+    var live = {
+      depart: state.time, eta: t.eta||"—", km: t.km!=null ? fmtKm(t.km) : "—",
+      drive: drive, dwell: fmtDur(t.dwell)
+    };
+    document.querySelectorAll("[data-live]").forEach(function(n){ n.textContent = live[n.getAttribute("data-live")]; });
   }
 
   function renderStops(){
@@ -620,7 +752,7 @@
               + badge
             + '</div>'
             + '<div class="stop-time">'
-              + '<span class="time-pill"><span class="l">ETA </span><b>'+times[i]+'</b></span>'
+              + '<span class="time-pill"><span class="l">ETA </span><b data-eta="'+i+'">'+times[i]+'</b></span>'
               + '<span class="time-pill"><span class="l">dwell </span><b>'+(s.dwell||0)+' min</b></span>'
             + '</div>'
           + '</div>'
@@ -639,6 +771,11 @@
           + '</div>'
           + '<div class="field"><label>dog note</label>'
             + '<input type="text" data-id="'+esc(s.id)+'" data-field="dog" value="'+esc(s.dog)+'" placeholder="e.g. grass, lead on" autocomplete="off" spellcheck="false"></div>'
+          + (isFirst ? '' : '<div class="field span2"><label>drive from previous (min)</label>'
+            + '<input type="number" data-id="'+esc(s.id)+'" data-field="legMin" value="'+(s.legMin!=null?s.legMin:"")+'" min="0" step="any" inputmode="decimal" placeholder="blank = km ÷ avg speed ('+Math.round(estLeg(i))+' min)">'
+            + '<span class="hint">Planned drive time into this stop; changing km clears it.</span></div>')
+          + '<div class="field span2"><label>notes</label>'
+            + '<input type="text" data-id="'+esc(s.id)+'" data-field="note" value="'+esc(s.note||"")+'" placeholder="e.g. fuel brand, restaurant" autocomplete="off" spellcheck="false"></div>'
         + '</div>'
         + '<details class="coords"><summary>Coordinates</summary>'
           + '<div class="grid">'
@@ -765,17 +902,28 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ el.toast.classList.remove("show"); }, ms||4000);
   }
+  // A planned drive time only holds for the neighbour it was planned against.
+  function clearLegs(from, to){
+    for(var k=Math.max(0,from); k<=to && k<stops.length; k++){ stops[k].legMin = null; }
+  }
+  function updateEtaPills(){
+    var times = computeTimes();
+    document.querySelectorAll("[data-eta]").forEach(function(b){ b.textContent = times[+b.getAttribute("data-eta")] || "—"; });
+  }
   function removeStop(id){
     var i = -1;
     for(var k=0;k<stops.length;k++){ if(stops[k].id===id){ i=k; break; } }
     if(i<0) return;
     var removed = stops.splice(i,1)[0];
+    var nextWas = stops[i] ? stops[i].legMin : null;
+    clearLegs(i, i);
     state.stops = stops;
     save(); render();
     toast('Removed “'+esc(removed.name)+'”. <button class="undo" id="undo" type="button">Undo</button>', 6500);
     var u = document.getElementById("undo");
     if(u) u.addEventListener("click", function(){
       stops.splice(Math.min(i, stops.length), 0, removed);
+      if(stops[i+1]){ stops[i+1].legMin = nextWas; }
       state.stops = stops; save(); render();
       el.toast.classList.remove("show");
     });
@@ -787,6 +935,7 @@
     var j = i + (dir==="up" ? -1 : 1);
     if(j<0 || j>=stops.length) return;
     var t = stops[i]; stops[i]=stops[j]; stops[j]=t;
+    clearLegs(Math.min(i,j), Math.max(i,j)+1);
     state.stops = stops; save(); render();
   }
   function seedReversed(){
@@ -808,6 +957,26 @@
     });
   }
   var seedArmed = false;
+
+  function syncInputs(){
+    document.getElementById("f-date").value = state.date;
+    document.getElementById("f-time").value = state.time;
+    document.getElementById("f-fuel").value = state.fuel;
+    document.getElementById("f-tank").value = state.tank;
+    document.getElementById("f-cons").value = state.cons;
+    document.getElementById("f-rlo").value = state.rangeLo;
+    document.getElementById("f-rhi").value = state.rangeHi;
+    document.getElementById("f-speed").value = state.speed;
+  }
+  function restoreSeed(){
+    toast('Replace your stops with the verified return plan? <button class="undo" id="restore-yes" type="button">Yes, replace</button>', 6500);
+    var y = document.getElementById("restore-yes");
+    if(y) y.addEventListener("click", function(){
+      state = seededState(); stops = state.stops;
+      save(); syncInputs(); render();
+      el.toast.classList.remove("show");
+    });
+  }
 
   function copyText(text, okMsg, fallbackId, fieldId, btn){
     var done = function(){ toast(okMsg); };
@@ -851,7 +1020,7 @@
       var obj = JSON.parse(text);
       state = sanitize(obj);
       stops = state.stops;
-      save(); render();
+      save(); syncInputs(); render();
       toast("Imported " + stops.length + " stop" + (stops.length===1?"":"s") + ".");
     } catch(e){
       toast("That isn’t valid JSON — nothing changed.");
@@ -901,10 +1070,19 @@
     var s = findStop(id); if(!s) return;
     if(f==="name"){ s.name = t.value; save(true); renderHeader(); renderRange(); renderRoute(); }
     else if(f==="dog"){ s.dog = t.value; save(true); }
+    else if(f==="note"){ s.note = t.value; save(true); }
+    else if(f==="legMin"){ var lm = parseFloat(t.value); s.legMin = (isFinite(lm) && lm>=0) ? lm : null;
+      save(true); renderHeader(); updateEtaPills(); }
     else if(f==="km"){ var v = parseFloat(t.value); s.km = isFinite(v)?v:null; s.kmEst = false;
       var badge = document.getElementById("est-"+id); if(badge) badge.style.display = "none";
-      save(true); renderHeader(); renderRange(); renderRoute(); }
-    else if(f==="dwell"){ s.dwell = parseFloat(t.value)||0; save(true); renderHeader(); renderRange(); }
+      var ix = stops.indexOf(s);
+      clearLegs(ix, ix+1);
+      el.stops.querySelectorAll('[data-field="legMin"]').forEach(function(inp){
+        var o = findStop(inp.getAttribute("data-id"));
+        if(o && o.legMin==null){ inp.value = ""; }
+      });
+      save(true); renderHeader(); renderRange(); renderRoute(); updateEtaPills(); }
+    else if(f==="dwell"){ s.dwell = parseFloat(t.value)||0; save(true); renderHeader(); renderRange(); updateEtaPills(); }
     else if(f==="type"){ s.type = t.value; save(true); renderRange(); renderRoute(); }
     else if(f==="lat"){ var la = parseFloat(t.value); s.lat = isFinite(la)?la:null; save(true); renderRoute(); }
     else if(f==="lon"){ var lo = parseFloat(t.value); s.lon = isFinite(lo)?lo:null; save(true); renderRoute(); }
@@ -918,6 +1096,7 @@
   });
 
   el.seed.addEventListener("click", seedReversed);
+  el.restore.addEventListener("click", restoreSeed);
   el["share-copy"].addEventListener("click", function(){ copyText(shareUrl(), "Share link copied", "share-fallback", "share-url", null); });
   el["wa-copy"].addEventListener("click", function(){ copyText(whatsappText(), "WhatsApp list copied", "share-fallback", "share-url", null); });
   el["export"].addEventListener("click", exportJson);
@@ -948,14 +1127,7 @@
   });
 
   // restore settings inputs from state (in case load() picked defaults/import)
-  document.getElementById("f-date").value = state.date;
-  document.getElementById("f-time").value = state.time;
-  document.getElementById("f-fuel").value = state.fuel;
-  document.getElementById("f-tank").value = state.tank;
-  document.getElementById("f-cons").value = state.cons;
-  document.getElementById("f-rlo").value = state.rangeLo;
-  document.getElementById("f-rhi").value = state.rangeHi;
-  document.getElementById("f-speed").value = state.speed;
+  syncInputs();
 
   render();
 
@@ -964,7 +1136,7 @@
     window.__RETURN_TEST_HOOK__({
       parseInput:parseInput, encodeState:encodeState, decodeState:decodeState,
       mapsPlan:mapsPlan, fuelLegs:fuelLegs, computeTimes:computeTimes, totals:totals,
-      whatsappText:whatsappText, shareUrl:shareUrl, importJson:importJson,
+      legDrive:legDrive, whatsappText:whatsappText, shareUrl:shareUrl, importJson:importJson,
       getState:function(){ return state; }, getStops:function(){ return stops; }
     });
   }
